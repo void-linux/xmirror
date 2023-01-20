@@ -1,0 +1,32 @@
+# url	region	location	tier
+####### Tier 1
+https://repo-fi.voidlinux.org/	EU	Helsinki, Finland	1
+https://repo-de.voidlinux.org/	EU	Frankfurt, Germany	1
+https://mirrors.servercentral.com/voidlinux/	NA	Chicago, USA	1
+https://repo-us.voidlinux.org/	NA	Kansas City, USA	1
+######## Tier 2
+https://mirror.ps.kz/voidlinux/	AS	Almaty, Kazakhstan	2
+https://mirror.nju.edu.cn/voidlinux/	AS	China	2
+https://mirrors.bfsu.edu.cn/voidlinux/	AS	Beijing, China	2
+https://mirrors.cnnic.cn/voidlinux/	AS	Beijing, China	2
+https://mirrors.tuna.tsinghua.edu.cn/voidlinux/	AS	Beijing, China	2
+https://mirror.sjtu.edu.cn/voidlinux/	AS	Shanghai, China	2
+https://void.webconverger.org/	AS	Singapore	2
+http://ftp.dk.xemacs.org/voidlinux/	EU	Denmark	2
+https://mirrors.dotsrc.org/voidlinux/	EU	Denmark	2
+https://quantum-mirror.hu/mirrors/pub/voidlinux/	EU	Hungary	2
+https://voidlinux.mirror.garr.it/	EU	Italy	2
+https://void.cijber.net/	EU	Amsterdam, Netherlands	2
+https://void.sakamoto.pl/	EU	Warsaw, Poland	2
+http://ftp.debian.ru/mirrors/voidlinux/	EU	Russia	2
+https://mirror.yandex.ru/mirrors/voidlinux/	EU	Russia	2
+https://ftp.lysator.liu.se/pub/voidlinux/	EU	Sweden	2
+https://mirror.accum.se/mirror/voidlinux/	EU	Sweden	2
+https://mirror.puzzle.ch/voidlinux/	EU	Bern, Switzerland	2
+https://mirror.vofr.net/voidlinux/	NA	California, USA	2
+https://mirror2.sandyriver.net/pub/voidlinux/	NA	Kentucky, USA	2
+https://mirror.clarkson.edu/voidlinux/	NA	New York, USA	2
+https://mirror.aarnet.edu.au/pub/voidlinux/	OC	Canberra, Australia	2
+https://ftp.swin.edu.au/voidlinux/	OC	Melbourne, Australia	2
+https://voidlinux.com.br/repo/	SA	Ouro Preto, Brazil	2
+http://void.chililinux.com/voidlinux/	SA	Pimenta Bueno, Brazil	2

@@ -1,0 +1,195 @@
+#!/bin/bash
+
+usage() {
+	cat 1>&2 <<EOF
+@@HELP@@
+EOF
+	exit 1
+}
+
+version () {
+	echo xmirror v@@VERSION@@
+}
+
+# dialog colors
+RED="\Z1"
+GREEN="\Z2"
+YELLOW="\Z3"
+WHITE="\Z7"
+BOLD="\Zb"
+RESET="\Zn"
+INITMSG=$(fold -sw 76 <<EOF
+
+For the best experience, choose a mirror geographically close to you. To use the default mirror (${RED}repo-default.voidlinux.org${RESET}), which can point to any Tier 1 mirror, Select ${BOLD}${RED}Default${RESET}.
+
+Tier 1 mirrors are maintained by the Void Linux Infrastructure Team and will always have the latest packages available. Tier 2 mirrors are not managed by Void and do not have any guarantees of freshness or completeness of packages, nor are they required to sync every available architecture or sub-repository.
+EOF
+)
+MENULABEL=$(fold -sw 74 <<EOF
+Use UP and DOWN keys to navigate menus. Use TAB to switch between buttons and ENTER to select.
+EOF
+)
+
+DIALOG() {
+    rm -f "$ANSWER"
+    dialog --colors --keep-tite --no-shadow --no-mouse \
+        --backtitle "${BOLD}${WHITE}Void Linux Mirror Selector -- https://www.voidlinux.org (@@VERSION@@)${RESET}" \
+        --cancel-label "Back" --aspect 20 "$@" 2>"$ANSWER"
+    return $?
+}
+
+DIE() {
+    rval=$1
+    [ -z "$rval" ] && rval=0
+    clear
+    rm -f "$ANSWER" "$NEWLIST"
+    exit "$rval"
+}
+
+check_required_programs() {
+	for cmd in sed dialog xbps-install xbps-fetch; do
+		command -v $cmd >/dev/null 2>&1 || ( echo "xmirror: could not find $cmd" 1>&2; exit 1 )
+	done
+}
+
+check_root() {
+	if [ "$(id -u)" != 0 ]; then
+		echo "xmirror must run as root" 1>&2
+		exit 1
+	fi
+}
+
+# uses names and abbreviations from https://planetarynames.wr.usgs.gov/Abbreviations
+region_name() {
+	case "$1" in
+		AF) echo "Africa" ;;
+		AN) echo "Antarctica" ;;
+		AS) echo "Asia" ;;
+		EU) echo "Europe" ;;
+		NA) echo "North America" ;;
+		OC) echo "Oceania" ;;
+		SA) echo "South and Central America" ;;
+		World) echo "Globally Available" ;;
+		*) echo "$1" ;;
+	esac
+}
+
+get_mirrors() {
+	# TODO: fetch list updates
+
+	# oldsha=$(xbps-digest $MIRRORLIST)
+	# newsha=$(xbps-fetch -s -o $NEWLIST $MIRRORURL)
+
+	while read -r line; do
+		[[ "$line" = '#'* ]] && continue
+		while IFS=$'\t' read -r url region location tier; do
+			allmirrors["$region"]+="$url	$location	$tier"$'\n'
+		done <<< "$line"
+	done < "$MIRRORLIST"
+
+	for region in $(printf '%s\n' "${!allmirrors[@]}" | sort -u); do
+		regions+=( "$region" "$(region_name "$region")" )
+	done
+
+	regions+=( "Default" "Reset to the default mirror" )
+	regions+=( "Exit" "Exit this wizard" )
+}
+
+write_mirrors() {
+	# TODO: dialog warning what will happen
+	# TODO: warn/error if mirrors don't have subrepos/arch available?
+	#       maybe this should put the new confs in a different dir then move only the ones that work?
+
+	if false; then
+		set -e
+		mkdir -p "${ROOTDIR}/etc/xbps.d"
+		cp "${ROOTDIR}"/usr/share/xbps.d/*-repository-*.conf "${ROOTDIR}/etc/xbps.d/"
+		sed -i "s|https://repo-default.voidlinux.org|$REPOSITORY|g" "${ROOTDIR}"/etc/xbps.d/*-repository-*.conf
+		xbps-install -S
+	fi
+	# TODO: final summary
+	DIE 0
+}
+
+reset_mirrors() {
+	# TODO: warn
+	#
+	if false; then
+		set -e
+		rm -f "${ROOTDIR}"/etc/xbps.d/*-repository-*.conf
+		xbps-install -S
+	fi
+	# TODO: final summary
+	DIE 0
+}
+
+region_menu() {
+	local sel
+	DIALOG --title " Choose a Region " \
+		--menu "$MENULABEL" 10 78 0 \
+		"${regions[@]}"
+
+	sel="$(cat "$ANSWER")"
+	case $sel in
+		"Exit"|'') DIE 0 ;;
+		"Default") reset_mirrors ;;
+		*) mirror_menu "$sel" ;;
+	esac
+}
+
+mirror_menu() {
+	local sel region="$1"
+	unset mirrors
+	declare -a mirrors
+
+	while read -r line; do
+		[ -z "$line" ] && continue
+		while IFS=$'\t' read -r url location tier; do
+			mirrors+=( "$url" "$location (Tier $tier)" )
+		done <<< "$line"
+	done <<< "${allmirrors[$region]}"
+
+	DIALOG --title " Choose a Mirror (Region: $(region_name "$region")) " \
+		--menu "$MENULABEL" 10 78 0 \
+		"${mirrors[@]}"
+
+	sel="$(cat "$ANSWER")"
+	case $sel in
+		"") ;;
+		*) write_mirrors "$sel" ;;
+	esac
+}
+
+trap "DIE" INT TERM QUIT
+
+while getopts l:r:u:vh flag; do
+	case $flag in
+		l) MIRRORLIST="$OPTARG" ;;
+		r) ROOTDIR="$OPTARG" ;;
+		u) MIRRORURL="$OPTARG" ;;
+		v) version ;;
+		h|?) usage ;;
+	esac
+done
+
+shift $(( OPTIND - 1 ))
+
+: "${MIRRORLIST:=${ROOTDIR}/usr/share/xmirror/mirrors.lst}"
+: "${MIRRORURL:=https://github.com/void-linux/xmirror/raw/master/mirrors.lst}"
+ANSWER=$(mktemp -t xmirror-XXXXXXXX || exit 1)
+NEWLIST=$(mktemp -t xmirror-list-XXXXXXXX || exit 1)
+declare -A allmirrors
+declare -a regions
+
+check_required_programs
+# check_root
+get_mirrors
+
+DIALOG --title "${BOLD} Void Linux Mirror Selection Wizard ${RESET}" --msgbox "$INITMSG" 15 80
+
+while true; do
+	region_menu
+done
+
+DIE 0
+# vim: set ft=bash:
