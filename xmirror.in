@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# TODO: noninteractive mode
 usage() {
 	cat 1>&2 <<EOF
 @@HELP@@
@@ -7,20 +8,19 @@ EOF
 	exit 1
 }
 
-version () {
-	echo xmirror v@@VERSION@@
+version() {
+	echo "xmirror v@@VERSION@@"
+	exit 0
 }
 
 # dialog colors
 RED="\Z1"
-GREEN="\Z2"
-YELLOW="\Z3"
 WHITE="\Z7"
 BOLD="\Zb"
 RESET="\Zn"
 INITMSG=$(fold -sw 76 <<EOF
 
-For the best experience, choose a mirror geographically close to you. To use the default mirror (${RED}repo-default.voidlinux.org${RESET}), which can point to any Tier 1 mirror, Select ${BOLD}${RED}Default${RESET}.
+For the best experience, choose a mirror geographically close to you, or use the Fastly Global CDN (listed in ${RED}World${RESET}). To use the default mirror (${RED}repo-default.voidlinux.org${RESET}), which can point to any Tier 1 mirror, Select ${BOLD}${RED}Default${RESET}.
 
 Tier 1 mirrors are maintained by the Void Linux Infrastructure Team and will always have the latest packages available. Tier 2 mirrors are not managed by Void and do not have any guarantees of freshness or completeness of packages, nor are they required to sync every available architecture or sub-repository.
 EOF
@@ -42,7 +42,7 @@ DIE() {
     rval=$1
     [ -z "$rval" ] && rval=0
     clear
-    rm -f "$ANSWER" "$NEWLIST"
+    rm -f "$ANSWER" "$NEWLIST" "$TMPDIR"
     exit "$rval"
 }
 
@@ -75,15 +75,17 @@ region_name() {
 }
 
 get_mirrors() {
+	local oldsha newsha
 	# TODO: fetch list updates
+	NEWLIST=$(mktemp -t xmirror-list-XXXXXXXX || DIE 1)
 
-	# oldsha=$(xbps-digest $MIRRORLIST)
-	# newsha=$(xbps-fetch -s -o $NEWLIST $MIRRORURL)
+	# oldsha=$(xbps-digest "$MIRRORLIST")
+	# newsha=$(xbps-fetch -s -o "$NEWLIST" "$MIRRORURL")
 
 	while read -r line; do
 		[[ "$line" = '#'* ]] && continue
-		while IFS=$'\t' read -r url region location tier; do
-			allmirrors["$region"]+="$url	$location	$tier"$'\n'
+		while IFS=$'\t' read -r region rest; do
+			allmirrors["$region"]+="$rest"$'\n'
 		done <<< "$line"
 	done < "$MIRRORLIST"
 
@@ -96,30 +98,50 @@ get_mirrors() {
 }
 
 write_mirrors() {
-	# TODO: dialog warning what will happen
+	local CONF_FILES REPOSITORY="$1"
+	CONF_FILES="$(find "${ROOTDIR}"/usr/share/xbps.d/ -name '*-repository-*.conf' | sort -u | sed 's|/usr/share|/etc|g')"
 	# TODO: warn/error if mirrors don't have subrepos/arch available?
 	#       maybe this should put the new confs in a different dir then move only the ones that work?
+	DIALOG --yesno "${BOLD}The following operations will be executed:${RESET}\n\n
+The current mirror will be switched to: ${RED}${REPOSITORY}${RESET}
+The following files in ${BOLD}${ROOTDIR}/etc/xbps.d${RESET} will be overwritten, if they exist:
+${RED}${CONF_FILES/ /\n}${RESET}\n\n
+${BOLD}Do you want to continue?${RESET}" 20 80 || return
 
-	if false; then
+	(
 		set -e
+		TMPDIR=$(mktemp -td xmirror-dir-XXXXXXXX || exit 1)
 		mkdir -p "${ROOTDIR}/etc/xbps.d"
-		cp "${ROOTDIR}"/usr/share/xbps.d/*-repository-*.conf "${ROOTDIR}/etc/xbps.d/"
-		sed -i "s|https://repo-default.voidlinux.org|$REPOSITORY|g" "${ROOTDIR}"/etc/xbps.d/*-repository-*.conf
+		cp "${ROOTDIR}"/usr/share/xbps.d/*-repository-*.conf "${TMPDIR}"
+		sed -i "s|https://repo-default.voidlinux.org|$REPOSITORY|g" "${TMPDIR}"/*
+		cp "${TMPDIR}/"* "${ROOTDIR}/etc/xbps.d/"
 		xbps-install -S
-	fi
-	# TODO: final summary
+	) || (
+		DIALOG --title "Error: Failed to Update Mirror" --msgbox "TODO" 16 80
+		DIE 1
+	)
+	DIALOG --title "Mirror Selection Complete" --msgbox "Mirror updated to ${RED}$REPOSITORY${RESET} successfully." 16 80
 	DIE 0
 }
 
 reset_mirrors() {
-	# TODO: warn
-	#
-	if false; then
+	local CONF_FILES
+	CONF_FILES="$(find "${ROOTDIR}"/etc/xbps.d/ -name '*-repository-*.conf' | sort -u)"
+	DIALOG --yesno "${BOLD}The following operations will be executed:${RESET}\n\n
+The current mirror will be reset to the default.
+The following files in ${BOLD}${ROOTDIR}/etc/xbps.d${RESET} will be removed:
+${RED}${CONF_FILES/ /\n}${RESET}\n\n
+${BOLD}Do you want to continue?${RESET}" 20 80 || return
+
+	(
 		set -e
 		rm -f "${ROOTDIR}"/etc/xbps.d/*-repository-*.conf
 		xbps-install -S
-	fi
-	# TODO: final summary
+	) || (
+		DIALOG --title "Error: Failed to Reset Mirror" --msgbox "TODO" 16 80
+		DIE 1
+	)
+	DIALOG --title "Mirror Reset Complete" --msgbox "Mirror updated to ${RED}$REPOSITORY${RESET} successfully." 16 80
 	DIE 0
 }
 
@@ -144,29 +166,31 @@ mirror_menu() {
 
 	while read -r line; do
 		[ -z "$line" ] && continue
-		while IFS=$'\t' read -r url location tier; do
+		while IFS=$'\t' read -r url location tier rest; do
 			mirrors+=( "$url" "$location (Tier $tier)" )
 		done <<< "$line"
 	done <<< "${allmirrors[$region]}"
 
-	DIALOG --title " Choose a Mirror (Region: $(region_name "$region")) " \
-		--menu "$MENULABEL" 10 78 0 \
-		"${mirrors[@]}"
+	while true; do
+		DIALOG --title " Choose a Mirror (Region: $(region_name "$region")) " \
+			--menu "$MENULABEL" 10 78 0 \
+			"${mirrors[@]}"
 
-	sel="$(cat "$ANSWER")"
-	case $sel in
-		"") ;;
-		*) write_mirrors "$sel" ;;
-	esac
+		sel="$(cat "$ANSWER")"
+		case $sel in
+			"") return ;;
+			*) write_mirrors "$sel" ;;
+		esac
+	done
 }
 
-trap "DIE" INT TERM QUIT
-
-while getopts l:r:u:vh flag; do
+while getopts l:r:u:s:dvh flag; do
 	case $flag in
 		l) MIRRORLIST="$OPTARG" ;;
 		r) ROOTDIR="$OPTARG" ;;
 		u) MIRRORURL="$OPTARG" ;;
+		s) SETMIRROR="$OPTARG" ;;
+		d) RESETMIRROR=1 ;;
 		v) version ;;
 		h|?) usage ;;
 	esac
@@ -174,15 +198,30 @@ done
 
 shift $(( OPTIND - 1 ))
 
+if [ -n "$SETMIRROR" ]; then
+	check_root && (write_mirrors "$SETMIRROR" || exit $?)
+	exit 0
+fi
+
+if [ -n "$RESETMIRROR" ]; then
+	check_root && (reset_mirrors || exit $?)
+	exit 0
+fi
+
 : "${MIRRORLIST:=${ROOTDIR}/usr/share/xmirror/mirrors.lst}"
 : "${MIRRORURL:=https://github.com/void-linux/xmirror/raw/master/mirrors.lst}"
-ANSWER=$(mktemp -t xmirror-XXXXXXXX || exit 1)
-NEWLIST=$(mktemp -t xmirror-list-XXXXXXXX || exit 1)
+
 declare -A allmirrors
 declare -a regions
 
 check_required_programs
 # check_root
+
+
+trap "DIE" INT TERM QUIT
+
+ANSWER=$(mktemp -t xmirror-XXXXXXXX || exit 1)
+
 get_mirrors
 
 DIALOG --title "${BOLD} Void Linux Mirror Selection Wizard ${RESET}" --msgbox "$INITMSG" 15 80
