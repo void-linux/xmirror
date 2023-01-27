@@ -4,7 +4,7 @@ EU	https://repo-fi.voidlinux.org/	Helsinki, Finland	1
 EU	https://repo-de.voidlinux.org/	Frankfurt, Germany	1
 NA	https://mirrors.servercentral.com/voidlinux/	Chicago, USA	1
 NA	https://repo-us.voidlinux.org/	Kansas City, USA	1
-World	https://repo-fastly.voidlinux.org/    Fastly Global CDN    1
+World	https://repo-fastly.voidlinux.org/	Fastly Global CDN	1
 ####### Tier 2
 AS	https://mirror.ps.kz/voidlinux/	Almaty, Kazakhstan	2
 AS	https://mirror.nju.edu.cn/voidlinux/	China	2
