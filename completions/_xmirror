@@ -1,0 +1,15 @@
+#compdef xmirror
+
+_arguments -s : \
+	+ '(meta)' \
+	'(common interactive noninteractive)-h[Show help for this command and exit]' \
+	'(common interactive noninteractive)-v[Show the version and exit]' \
+	+ common \
+	'(meta)-r[Use an alternative rootdir]:rootdir:_files -/' \
+	+ interactive \
+	'(meta noninteractive)-l[Use an alternative mirror list file]:mirrorlist:_files' \
+	'(meta noninteractive)-n[Don'"'"'t attempt to update the mirror list]' \
+	'(meta noninteractive)-u[Use an alternative mirror list URL]:( )' \
+	+ '(noninteractive)' \
+	'(meta interactive)-d[Reset the current mirror to the default]' \
+	'(meta interactive)-s[Set the current mirror]:( )'

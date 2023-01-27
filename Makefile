@@ -16,6 +16,7 @@ xmirror: .help
 install: xmirror
 	install -Dm 755 xmirror -t $(DESTDIR)$(PREFIX)/bin
 	install -Dm 644 mirrors.lst -t $(DESTDIR)$(PREFIX)/share/xmirror
+	install -Dm 644 completions/_xmirror -t $(DESTDIR)$(PREFIX)/share/zsh/site-functions
 
 clean:
 	rm -f xmirror .help
