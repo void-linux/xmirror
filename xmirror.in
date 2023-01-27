@@ -1,6 +1,5 @@
 #!/bin/bash
 
-# TODO: noninteractive mode
 usage() {
 	cat 1>&2 <<EOF
 @@HELP@@
@@ -42,7 +41,7 @@ DIE() {
     rval=$1
     [ -z "$rval" ] && rval=0
     clear
-    rm -f "$ANSWER" "$NEWLIST" "$TMPDIR"
+    rm -f "$ANSWER" "$NEWLIST" "$LOG"
     exit "$rval"
 }
 
@@ -75,12 +74,24 @@ region_name() {
 }
 
 get_mirrors() {
-	local oldsha newsha
-	# TODO: fetch list updates
-	NEWLIST=$(mktemp -t xmirror-list-XXXXXXXX || DIE 1)
+	local oldsha newsha fetchfail
 
-	# oldsha=$(xbps-digest "$MIRRORLIST")
-	# newsha=$(xbps-fetch -s -o "$NEWLIST" "$MIRRORURL")
+	if [ -z "$NOFETCH" ]; then
+		NEWLIST=$(mktemp -t xmirror-list-XXXXXXXX || DIE 1)
+
+		oldsha=$(xbps-digest "${ROOTDIR}/usr/share/xmirror/mirrors.lst")
+		newsha=$(xbps-fetch -s -o "$NEWLIST" "$MIRRORURL") || fetchfail=1
+
+		if [ -n "$fetchfail" ]; then
+			echo "xmirror: unable to fetch new mirror list" 1>&2
+		elif [ "$oldsha" = "$newsha" ]; then
+			echo "xmirror: new mirror list has no changes, not updating" 1>&2
+		else
+			echo "xmirror: updating mirrorlist in ${ROOTDIR}/usr/share/xmirror"
+			mv "${ROOTDIR}/usr/share/xmirror/mirrors.lst" "${ROOTDIR}/usr/share/xmirror/mirrors.lst.old"
+			cp "$NEWLIST" "${ROOTDIR}/usr/share/xmirror/mirrors.lst"
+		fi
+	fi
 
 	while read -r line; do
 		[[ "$line" = '#'* ]] && continue
@@ -100,24 +111,21 @@ get_mirrors() {
 write_mirrors() {
 	local CONF_FILES REPOSITORY="$1"
 	CONF_FILES="$(find "${ROOTDIR}"/usr/share/xbps.d/ -name '*-repository-*.conf' | sort -u | sed 's|/usr/share|/etc|g')"
-	# TODO: warn/error if mirrors don't have subrepos/arch available?
-	#       maybe this should put the new confs in a different dir then move only the ones that work?
 	DIALOG --yesno "${BOLD}The following operations will be executed:${RESET}\n\n
 The current mirror will be switched to: ${RED}${REPOSITORY}${RESET}
 The following files in ${BOLD}${ROOTDIR}/etc/xbps.d${RESET} will be overwritten, if they exist:
 ${RED}${CONF_FILES/ /\n}${RESET}\n\n
 ${BOLD}Do you want to continue?${RESET}" 20 80 || return
 
+	LOG=$(mktemp -t xmirror-log-XXXXXXXX || exit 1)
 	(
-		set -e
-		TMPDIR=$(mktemp -td xmirror-dir-XXXXXXXX || exit 1)
+		set -ex
 		mkdir -p "${ROOTDIR}/etc/xbps.d"
-		cp "${ROOTDIR}"/usr/share/xbps.d/*-repository-*.conf "${TMPDIR}"
-		sed -i "s|https://repo-default.voidlinux.org|$REPOSITORY|g" "${TMPDIR}"/*
-		cp "${TMPDIR}/"* "${ROOTDIR}/etc/xbps.d/"
+		cp "${ROOTDIR}/usr/share/xbps.d"/*-repository-*.conf "${ROOTDIR}/etc/xbps.d/"
+		sed -i "s|https://repo-default.voidlinux.org|$REPOSITORY|g" "${ROOTDIR}/etc/xbps.d"/*
 		xbps-install -S
-	) || (
-		DIALOG --title "Error: Failed to Update Mirror" --msgbox "TODO" 16 80
+	) &> "$LOG" || (
+		DIALOG --title "Error: Failed to Update Mirror" --msgbox "$(cat "$LOG")" 16 80
 		DIE 1
 	)
 	DIALOG --title "Mirror Selection Complete" --msgbox "Mirror updated to ${RED}$REPOSITORY${RESET} successfully." 16 80
@@ -134,11 +142,11 @@ ${RED}${CONF_FILES/ /\n}${RESET}\n\n
 ${BOLD}Do you want to continue?${RESET}" 20 80 || return
 
 	(
-		set -e
+		set -ex
 		rm -f "${ROOTDIR}"/etc/xbps.d/*-repository-*.conf
 		xbps-install -S
-	) || (
-		DIALOG --title "Error: Failed to Reset Mirror" --msgbox "TODO" 16 80
+	) &> "$LOG" || (
+		DIALOG --title "Error: Failed to Reset Mirror" --msgbox "$(cat "$LOG")" 16 80
 		DIE 1
 	)
 	DIALOG --title "Mirror Reset Complete" --msgbox "Mirror updated to ${RED}$REPOSITORY${RESET} successfully." 16 80
@@ -184,13 +192,14 @@ mirror_menu() {
 	done
 }
 
-while getopts l:r:u:s:dvh flag; do
+while getopts l:r:u:s:dnvh flag; do
 	case $flag in
 		l) MIRRORLIST="$OPTARG" ;;
 		r) ROOTDIR="$OPTARG" ;;
 		u) MIRRORURL="$OPTARG" ;;
 		s) SETMIRROR="$OPTARG" ;;
 		d) RESETMIRROR=1 ;;
+		n) NOFETCH=1 ;;
 		v) version ;;
 		h|?) usage ;;
 	esac
@@ -215,8 +224,7 @@ declare -A allmirrors
 declare -a regions
 
 check_required_programs
-# check_root
-
+check_root
 
 trap "DIE" INT TERM QUIT
 
