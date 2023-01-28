@@ -3,7 +3,7 @@ DESTDIR:=
 PREFIX:=/usr
 
 .DEFAULT: xmirror
-.PHONY: install clean
+.PHONY: install clean deploy
 
 .help:
 	awk '/^```help/ { in_block=1; next } /^```/ { exit } in_block { print }' README.md > .help
@@ -19,4 +19,8 @@ install: xmirror
 	install -Dm 644 completions/_xmirror -t $(DESTDIR)$(PREFIX)/share/zsh/site-functions
 
 clean:
-	rm -f xmirror .help
+	rm -rf xmirror .help _site
+
+deploy:
+	mkdir -p _site/raw
+	cp mirrors.lst _site/raw/
