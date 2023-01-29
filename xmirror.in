@@ -244,7 +244,7 @@ if [ -n "$RESETMIRROR" ]; then
 fi
 
 : "${MIRRORLIST:=${ROOTDIR}/usr/share/xmirror/mirrors.lst}"
-: "${MIRRORURL:=https://github.com/void-linux/xmirror/raw/master/mirrors.lst}"
+: "${MIRRORURL:=https://xmirror.voidlinux.org/raw/mirrors.lst}"
 
 declare -A allmirrors
 declare -a regions

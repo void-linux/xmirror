@@ -15,7 +15,7 @@ Script for changing XBPS mirrors
 	-s	Set the current mirror to mirrorurl and exit, skipping the interactive TUI.
 	-u	Use an alternative mirror list URL. This should be a url pointing
 		to a mirror list file.
-		Default: https://github.com/void-linux/xmirror/raw/master/mirrors.lst
+		Default: https://xmirror.voidlinux.org/raw/mirrors.lst
 	-v	Show the version and exit.
 
 Copyright (c) 2023 classabbyamp, released under the BSD-2-Clause license
