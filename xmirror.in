@@ -134,7 +134,7 @@ write_mirrors() {
 	mkdir -p "${ROOTDIR}/etc/xbps.d"
 	cp "${ROOTDIR}/usr/share/xbps.d"/*-repository-*.conf "${ROOTDIR}/etc/xbps.d/"
 	sed -i "s|https://repo-default.voidlinux.org|${REPOSITORY%/}|g" "${ROOTDIR}/etc/xbps.d"/*
-	xbps-install -S
+	xbps-install -S -r "${ROOTDIR}"
 	set +e
 }
 
@@ -161,7 +161,7 @@ ${BOLD}Do you want to continue?${RESET}" 20 80 || return
 reset_mirrors() {
 	set -e
 	rm -f "${ROOTDIR}"/etc/xbps.d/*-repository-*.conf
-	xbps-install -S
+	xbps-install -S -r "${ROOTDIR}"
 	set +e
 }
 
