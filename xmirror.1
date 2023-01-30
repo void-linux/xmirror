@@ -1,0 +1,98 @@
+.Dd January 30, 2023
+.Dt XMIRROR 1
+.Os
+.Sh NAME
+.Nm xmirror
+.Nd Interactive script for changing XBPS mirrors
+.Sh SYNOPSIS
+.Nm xmirror
+.Op OPTIONS...
+.Sh DESCRIPTION
+The
+.Nm
+utility sets and resets the mirror server that XBPS uses. It can be used both
+with and without the interactive TUI.
+.Nm
+requires root permissions to execute.
+.Sh OPTIONS
+.Ss Common
+.Bl -tag -width -x
+.It Fl h
+Show help and exit.
+.It Fl r Ar rootdir
+Use an alternative
+.Ar rootdir .
+Acts similar to XBPS's
+.Fl r
+flag.
+.It Fl v
+Show the version and exit.
+.El
+.Ss Interactive
+These options only work when using the interactive TUI.
+.Bl -tag -width -x
+.It Fl l Ar mirrorlist
+Use an alternative
+.Ar mirrorlist
+file. This should be in the format described in
+.Sx FILES .
+Default:
+.Pa /usr/share/xmirror/mirrors.lst
+.It Fl n
+Don't attempt to update the mirror list.
+.It Fl u Ar mirrorurl
+Use an alternative mirror list URL. This should be a url pointing to a mirror
+list file with the format described in
+.Sx FILES .
+Default:
+.Lk https://xmirror.voidlinux.org/raw/mirrors.lst
+.El
+.Ss Non-Interactive
+Using these options skips the interactive TUI.
+.Bl -tag -width -x
+.It Fl d
+Reset the current mirror to the default and exit.
+.It Fl s Ar mirrorurl
+Set the current mirror to
+.Ar mirrorurl
+and exit.
+.El
+.Sh ENVIRONMENT
+.Nm
+respects all environment variables
+.Xr xbps-install 1
+uses when synchronizing repository indexes after selecting or resetting mirrors.
+.Pp
+.Sy XBPS_ARCH
+is particularly useful if setting the mirror on a system of a different
+architecture.
+.Sh FILES
+.Ar /usr/share/xmirror/mirrors.lst
+is where the current mirror list is stored. It is a tab-separated value file,
+with the columns:
+.Bl -tag -width location
+.It Sy region
+A continent abbreviation from
+.Lk https://planetarynames.wr.usgs.gov/Abbreviations ,
+.Em World ,
+or another string describing the region of the mirror.
+.It Sy url
+The base url of the mirror, for example:
+.Lk https://repo-default.voidlinux.org/
+.It Sy location
+A human-readable location for the mirror, like a country and/or city.
+.It Sy tier
+An indicator of status.
+.El
+.Pp
+All lines beginning with
+.Em #
+are ignored.
+.Sh SEE ALSO
+.Xr xbps-install 1 ,
+.Lk https://docs.voidlinux.org/xbps/repositories/mirrors/changing.html
+.Sh AUTHOR
+.An classabbyamp Aq Mt void@placeviolette.net
+.Sh BUGS
+Report bugs at
+.Lk https://github.com/void-linux/xmirror/issues
