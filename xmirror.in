@@ -45,9 +45,24 @@ DIE() {
 }
 
 check_required_programs() {
-	for cmd in sed dialog xbps-install xbps-fetch; do
+	for cmd in sed dialog; do
 		command -v $cmd >/dev/null 2>&1 || ( echo "xmirror: could not find $cmd" 1>&2; exit 1 )
 	done
+	XBPS_INSTALL="$(check_xbps_program install)"
+	XBPS_FETCH="$(check_xbps_program fetch)"
+	XBPS_DIGEST="$(check_xbps_program digest)"
+}
+
+check_xbps_program() {
+	local prog="$1"
+	if command -v "xbps-$prog" >/dev/null 2>&1; then
+		echo "xbps-$prog"
+	elif command -v "xbps-$prog.static" >/dev/null 2>&1; then
+		echo "xbps-$prog.static"
+	else
+		echo "xmirror: could not find xbps-$prog or xbps-$prog.static" 1>&2
+		exit 1
+	fi
 }
 
 check_root() {
@@ -73,23 +88,31 @@ region_name() {
 }
 
 get_mirrors() {
-	local oldsha newsha fetchfail
+	local oldsha newsha fetchfail prefetched
 
 	if [ -z "$NOFETCH" ]; then
 		NEWLIST=$(mktemp -t xmirror-list-XXXXXXXX || DIE 1)
 
-		oldsha=$(xbps-digest "${ROOTDIR}/usr/share/xmirror/mirrors.lst")
-		newsha=$(xbps-fetch -o "$NEWLIST" "$MIRRORURL" &>/dev/null && \
-			xbps-digest "$NEWLIST") || fetchfail=1
+		oldsha=$($XBPS_DIGEST "${ROOTDIR}/usr/share/xmirror/mirrors.lst")
+		if $XBPS_FETCH -o "$NEWLIST" "$MIRRORURL" &>/dev/null; then
+			# xbps-fetch won't download anything if the file is identical to one it's already downloaded
+			if [ "$(wc -c "$NEWLIST" | cut -d' ' -f1)" -eq 0 ]; then
+				prefetched=1
+			else
+				newsha=$($XBPS_DIGEST "$NEWLIST") || fetchfail=1
+			fi
+		else
+			fetchfail=1
+		fi
 
 		if [ -n "$fetchfail" ]; then
 			echo "xmirror: unable to fetch new mirror list" 1>&2
-		elif [ "$oldsha" = "$newsha" ]; then
+		elif [ -n "$prefetched" ] || [ "$oldsha" = "$newsha" ]; then
 			echo "xmirror: new mirror list has no changes, not updating" 1>&2
 		else
 			echo "xmirror: updating mirrorlist in ${ROOTDIR}/usr/share/xmirror"
-			mv "${ROOTDIR}/usr/share/xmirror/mirrors.lst" "${ROOTDIR}/usr/share/xmirror/mirrors.lst.old"
-			cp "$NEWLIST" "${ROOTDIR}/usr/share/xmirror/mirrors.lst"
+			cp --no-preserve=mode,ownership --backup=simple --suffix=.old \
+				"$NEWLIST" "${ROOTDIR}/usr/share/xmirror/mirrors.lst"
 		fi
 	fi
 
@@ -134,7 +157,7 @@ write_mirrors() {
 	mkdir -p "${ROOTDIR}/etc/xbps.d"
 	cp "${ROOTDIR}/usr/share/xbps.d"/*-repository-*.conf "${ROOTDIR}/etc/xbps.d/"
 	sed -i "s|https://repo-default.voidlinux.org|${REPOSITORY%/}|g" "${ROOTDIR}/etc/xbps.d"/*
-	xbps-install -S -r "${ROOTDIR}"
+	$XBPS_INSTALL -S -r "${ROOTDIR}"
 	set +e
 }
 
@@ -161,7 +184,7 @@ ${BOLD}Do you want to continue?${RESET}" 20 80 || return
 reset_mirrors() {
 	set -e
 	rm -f "${ROOTDIR}"/etc/xbps.d/*-repository-*.conf
-	xbps-install -S -r "${ROOTDIR}"
+	$XBPS_INSTALL -S -r "${ROOTDIR}"
 	set +e
 }
 
