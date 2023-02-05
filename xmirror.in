@@ -145,7 +145,12 @@ ${BOLD}Do you want to continue?${RESET}" 20 80 || return
 		# shellcheck disable=SC2030
 		RET="$?"
 		[ "$RET" -eq 0 ] && printf "\nMirror successfully changed to %s!\n" "$REPOSITORY" \
-			|| printf "\nMirror update failed! See log above for details.\n"
+			|| {
+				for f in "${ROOTDIR}/etc/xbps.d"/*-repository-*.conf.old; do
+					mv "$f" "${f%.old}"
+				done
+				printf "\nMirror update failed! See log above for details.\n"
+			}
 	} |& DIALOG --title " Updating mirror... " --programbox 16 80
 	# shellcheck disable=SC2031
 	DIE "$RET"
@@ -153,12 +158,15 @@ ${BOLD}Do you want to continue?${RESET}" 20 80 || return
 
 write_mirrors() {
 	local REPOSITORY="$1"
-	set -e
-	mkdir -p "${ROOTDIR}/etc/xbps.d"
-	cp "${ROOTDIR}/usr/share/xbps.d"/*-repository-*.conf "${ROOTDIR}/etc/xbps.d/"
-	sed -i "s|https://repo-default.voidlinux.org|${REPOSITORY%/}|g" "${ROOTDIR}/etc/xbps.d"/*
-	$XBPS_INSTALL -S -r "${ROOTDIR}"
-	set +e
+	if ! [[ "$REPOSITORY" =~ "http://"* || "$REPOSITORY" =~ "https://"* ]]; then
+		echo "xmirror: warning: mirror protocol not specified, assuming http://" 1>&2
+		REPOSITORY="http://$REPOSITORY"
+	fi
+	mkdir -p "${ROOTDIR}/etc/xbps.d" || return 1
+	cp --no-preserve=mode,ownership --backup=simple --suffix=.old \
+		"${ROOTDIR}/usr/share/xbps.d"/*-repository-*.conf "${ROOTDIR}/etc/xbps.d/" || return 1
+	sed -i "s|https://repo-default.voidlinux.org|${REPOSITORY%/}|g" "${ROOTDIR}/etc/xbps.d"/* || return 1
+	$XBPS_INSTALL -S -r "${ROOTDIR}" || return 1
 }
 
 reset_mirrors_int() {
@@ -182,10 +190,8 @@ ${BOLD}Do you want to continue?${RESET}" 20 80 || return
 }
 
 reset_mirrors() {
-	set -e
-	rm -f "${ROOTDIR}"/etc/xbps.d/*-repository-*.conf
-	$XBPS_INSTALL -S -r "${ROOTDIR}"
-	set +e
+	rm -f "${ROOTDIR}"/etc/xbps.d/*-repository-*.conf || return 1
+	$XBPS_INSTALL -S -r "${ROOTDIR}" || return 1
 }
 
 region_menu() {
@@ -250,6 +256,9 @@ if [ -n "$SETMIRROR" ]; then
 			echo "xmirror: mirror successfully updated to $SETMIRROR." 1>&2
 			exit 0
 		else
+			for f in "${ROOTDIR}/etc/xbps.d"/*-repository-*.conf.old; do
+				mv "$f" "${f%.old}"
+			done
 			echo "xmirror: mirror update failed." 1>&2
 			exit 1
 		fi
