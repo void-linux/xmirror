@@ -45,7 +45,7 @@ DIE() {
 }
 
 check_required_programs() {
-	for cmd in sed dialog; do
+	for cmd in find sed "$@"; do
 		command -v $cmd >/dev/null 2>&1 || ( echo "xmirror: could not find $cmd" 1>&2; exit 1 )
 	done
 	XBPS_INSTALL="$(check_xbps_program install)"
@@ -243,7 +243,9 @@ done
 shift $(( OPTIND - 1 ))
 
 if [ -n "$SETMIRROR" ]; then
+	check_required_programs && \
 	check_root && {
+		echo "xmirror: updating mirror to $SETMIRROR..." 1>&2
 		if write_mirrors "$SETMIRROR"; then
 			echo "xmirror: mirror successfully updated to $SETMIRROR." 1>&2
 			exit 0
@@ -255,7 +257,9 @@ if [ -n "$SETMIRROR" ]; then
 fi
 
 if [ -n "$RESETMIRROR" ]; then
+	check_required_programs && \
 	check_root && {
+		echo "xmirror: resetting mirror..." 1>&2
 		if reset_mirrors "$SETMIRROR"; then
 			echo "xmirror: mirror successfully reset." 1>&2
 			exit 0
@@ -272,7 +276,7 @@ fi
 declare -A allmirrors
 declare -a regions
 
-check_required_programs
+check_required_programs dialog
 check_root
 
 trap "DIE" INT TERM QUIT
