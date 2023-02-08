@@ -2,14 +2,13 @@
 
 _arguments -s : \
 	+ '(meta)' \
-	'(common interactive noninteractive)-h[Show help for this command and exit]' \
-	'(common interactive noninteractive)-v[Show the version and exit]' \
+	'(common interactive noninteractive)'{-h,--help}'[Show help for this command and exit]' \
+	'(common interactive noninteractive)'{-v,--version}'[Show the version and exit]' \
 	+ common \
-	'(meta)-r[Use an alternative rootdir]:rootdir:_files -/' \
+	'(meta)'{-r,--rootdir}'[Use an alternative rootdir]:rootdir:_files -/' \
 	+ interactive \
-	'(meta noninteractive)-l[Use an alternative mirror list file]:mirrorlist:_files' \
-	'(meta noninteractive)-n[Don'"'"'t attempt to update the mirror list]' \
-	'(meta noninteractive)-u[Use an alternative mirror list URL]:( )' \
+	'(meta noninteractive)'{-l,--mirror-list}'[Use an alternative mirror list file]:mirrorlist:_files' \
+	'(meta noninteractive)'{-n,--no-fetch}'[Don'"'"'t attempt to update the mirror list]' \
 	+ '(noninteractive)' \
-	'(meta interactive)-d[Reset the current mirror to the default]' \
-	'(meta interactive)-s[Set the current mirror]:( )'
+	'(meta interactive)'{-d,--default}'[Reset the current mirror to the default]' \
+	'(meta interactive)'{-s,--set}'[Set the current mirror]:( )'

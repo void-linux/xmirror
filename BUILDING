@@ -1,0 +1,24 @@
+Installing xmirror
+==================
+
+Dependencies
+------------
+
+Build-time:
+- make
+- sed
+- install
+
+Runtime:
+- bash
+- dialog
+- find
+- sed
+- util-linux (getopt)
+- xbps
+
+Building
+--------
+
+$ make
+$ make install

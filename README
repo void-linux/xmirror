@@ -1,0 +1,79 @@
+XMIRROR(1)                  General Commands Manual                 XMIRROR(1)
+
+NAME
+     xmirror – Interactive script for changing XBPS mirrors
+
+SYNOPSIS
+     xmirror [OPTIONS...]
+
+DESCRIPTION
+     The xmirror utility sets and resets the mirror server that XBPS uses.  It
+     can be used both with and without the interactive TUI.  xmirror requires
+     root permissions to execute.
+
+OPTIONS
+   Common
+     -h, --help
+         Show help and exit.
+
+     -r, --rootdir rootdir
+         Use an alternative rootdir.  Acts similar to XBPS's -r flag.
+
+     -v, --version
+         Show the version and exit.
+
+   Interactive
+     These options only work when using the interactive TUI.
+
+     -l, --mirror-list mirrorlist
+         Use an alternative mirrorlist file. This should be in the format
+         described in FILES.  Default: /usr/share/xmirror/mirrors.lst
+
+     -n, --no-fetch
+         Don't attempt to update the mirror list.
+
+   Non-Interactive
+     Using these options skips the interactive TUI.
+
+     -d, --default
+         Reset the current mirror to the default and exit.
+
+     -s, --set mirrorurl
+         Set the current mirror to mirrorurl and exit.
+
+ENVIRONMENT
+     xmirror respects all environment variables xbps-install(1) uses when
+     synchronizing repository indexes after selecting or resetting mirrors.
+
+     XBPS_ARCH is particularly useful if setting the mirror on a system of a
+     different architecture.
+
+FILES
+     /usr/share/xmirror/mirrors.lst is where the current mirror list is
+     stored. It is a tab-separated value file, with the columns:
+
+     region    A continent abbreviation from
+               https://planetarynames.wr.usgs.gov/Abbreviations, World, or
+               another string describing the region of the mirror.
+
+     url       The base url of the mirror, for example:
+               https://repo-default.voidlinux.org/
+
+     location  A human-readable location for the mirror, like a country and/or
+               city.
+
+     tier      An indicator of status.
+
+     All lines beginning with # are ignored.
+
+SEE ALSO
+     xbps-install(1),
+     https://docs.voidlinux.org/xbps/repositories/mirrors/changing.html
+
+AUTHOR
+     classabbyamp <void@placeviolette.net>
+
+BUGS
+     Report bugs at https://github.com/void-linux/xmirror/issues
+
+Void Linux                     January 30, 2023                     Void Linux

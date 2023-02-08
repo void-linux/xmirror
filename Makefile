@@ -1,17 +1,14 @@
-VERSION:=0.0
-DESTDIR:=
-PREFIX:=/usr
+VERSION   = 0.0
+DESTDIR   =
+PREFIX    = /usr/local
+MIRRORURL = https://xmirror.voidlinux.org/raw/mirrors.lst
 
-.DEFAULT: xmirror
 .PHONY: install clean deploy
 
-.help:
-	awk '/^```help/ { in_block=1; next } /^```/ { exit } in_block { print }' README.md > .help
-
-xmirror: .help
-	sed -e "s/@@VERSION@@/$(VERSION)/g" xmirror.in > xmirror
-	sed -e "/@@HELP@@/r .help" -i xmirror
-	sed -e "/@@HELP@@/d" -i xmirror
+xmirror: xmirror.in
+	sed -e "s/@@VERSION@@/$(VERSION)/g; s,@@MIRRORURL@@,$(MIRRORURL),g" $@.in >$@+
+	chmod +x $@+
+	mv $@+ $@
 
 install: xmirror
 	install -Dm 755 xmirror -t $(DESTDIR)$(PREFIX)/bin
@@ -20,9 +17,12 @@ install: xmirror
 	install -Dm 644 xmirror.1 -t $(DESTDIR)$(PREFIX)/share/man/man1
 
 clean:
-	rm -rf xmirror .help _site
+	rm -rf xmirror _site
 
-deploy:
+README: xmirror.1
+	mandoc -Tutf8 $< | col -bx >$@
+
+deploy: mirrors.lst
 	mkdir -p _site/raw
 	# a hacky but simple homepage that redirects to the manpage
 	@echo 'generating redirect page at _site/index.html'

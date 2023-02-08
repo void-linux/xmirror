@@ -10,49 +10,43 @@
 .Sh DESCRIPTION
 The
 .Nm
-utility sets and resets the mirror server that XBPS uses. It can be used both
-with and without the interactive TUI.
+utility sets and resets the mirror server that XBPS uses.
+It can be used both with and without the interactive TUI.
 .Nm
 requires root permissions to execute.
 .Sh OPTIONS
 .Ss Common
 .Bl -tag -width -x
-.It Fl h
+.It Fl h , Fl -help
 Show help and exit.
-.It Fl r Ar rootdir
+.It Fl r , Fl -rootdir Ar rootdir
 Use an alternative
 .Ar rootdir .
 Acts similar to XBPS's
 .Fl r
 flag.
-.It Fl v
+.It Fl v , Fl -version
 Show the version and exit.
 .El
 .Ss Interactive
 These options only work when using the interactive TUI.
 .Bl -tag -width -x
-.It Fl l Ar mirrorlist
+.It Fl l , Fl -mirror-list Ar mirrorlist
 Use an alternative
 .Ar mirrorlist
 file. This should be in the format described in
 .Sx FILES .
 Default:
 .Pa /usr/share/xmirror/mirrors.lst
-.It Fl n
+.It Fl n , Fl -no-fetch
 Don't attempt to update the mirror list.
-.It Fl u Ar mirrorurl
-Use an alternative mirror list URL. This should be a url pointing to a mirror
-list file with the format described in
-.Sx FILES .
-Default:
-.Lk https://xmirror.voidlinux.org/raw/mirrors.lst
 .El
 .Ss Non-Interactive
 Using these options skips the interactive TUI.
 .Bl -tag -width -x
-.It Fl d
+.It Fl d , Fl -default
 Reset the current mirror to the default and exit.
-.It Fl s Ar mirrorurl
+.It Fl s , Fl -set Ar mirrorurl
 Set the current mirror to
 .Ar mirrorurl
 and exit.
