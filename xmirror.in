@@ -54,7 +54,7 @@ DIALOG() {
 }
 
 die() {
-    rm -f "$ANSWER" "$NEWLIST"
+    rm -f "$ANSWER"
     exit "${1:-0}"
 }
 
@@ -71,7 +71,6 @@ check_required_programs() {
 	done
 	XBPS_INSTALL="$(check_xbps_program install)"
 	XBPS_FETCH="$(check_xbps_program fetch)"
-	XBPS_DIGEST="$(check_xbps_program digest)"
 }
 
 check_xbps_program() {
@@ -109,31 +108,10 @@ region_name() {
 }
 
 get_mirrors() {
-	local oldsha newsha fetchfail prefetched
-
 	if [ -z "$NOFETCH" ]; then
-		NEWLIST=$(mktemp -t xmirror-list-XXXXXXXX) || exit 1
-
-		oldsha=$($XBPS_DIGEST "${ROOTDIR}/usr/share/xmirror/mirrors.lst")
-		if $XBPS_FETCH -o "$NEWLIST" "$MIRRORURL" &>/dev/null; then
-			# xbps-fetch won't download anything if the file is identical to one it's already downloaded
-			if [ -s "$NEWLIST" ]; then
-				newsha=$($XBPS_DIGEST "$NEWLIST") || fetchfail=1
-			else
-				prefetched=1
-			fi
-		else
-			fetchfail=1
-		fi
-
-		if [ -n "$fetchfail" ]; then
+		log "updating mirrorlist in ${ROOTDIR}/usr/share/xmirror"
+		if ! $XBPS_FETCH -o "$MIRRORLIST" "$MIRRORURL" &>/dev/null; then
 			log "unable to fetch new mirror list"
-		elif [ -n "$prefetched" ] || [ "$oldsha" = "$newsha" ]; then
-			: log "new mirror list has no changes, not updating"
-		else
-			log "updating mirrorlist in ${ROOTDIR}/usr/share/xmirror"
-			cp --no-preserve=mode,ownership --backup=simple --suffix=.old \
-				"$NEWLIST" "${ROOTDIR}/usr/share/xmirror/mirrors.lst"
 		fi
 	fi
 
@@ -268,7 +246,7 @@ unset TEMP
 
 while true; do
 	case "$1" in
-		'-l'|'--mirror-list') MIRRORLIST="$2"; shift 2 ;;
+		'-l'|'--mirror-list') MIRRORLIST="$2"; NOFETCH=1; shift 2 ;;
 		'-r'|'--rootdir')     ROOTDIR="$2";    shift 2 ;;
 		'-s'|'--set')         SETMIRROR="$2";  shift 2 ; [ -z "$RESETMIRROR" ] || usage ;;
 		'-d'|'--default')     RESETMIRROR=1;   shift   ; [ -z "$SETMIRROR"   ] || usage ;;
