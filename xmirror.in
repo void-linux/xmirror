@@ -53,18 +53,21 @@ DIALOG() {
     return $?
 }
 
-DIE() {
+die() {
     rm -f "$ANSWER" "$NEWLIST"
     exit "${1:-0}"
 }
 
-LOG() {
+log() {
 	echo xmirror: "$@" 1>&2
 }
 
 check_required_programs() {
 	for cmd in find sed "$@"; do
-		command -v "$cmd" >/dev/null 2>&1 || ( LOG "could not find $cmd"; exit 1 )
+		if ! command -v "$cmd" >/dev/null 2>&1; then
+			log "could not find $cmd"
+			exit 1
+		fi
 	done
 	XBPS_INSTALL="$(check_xbps_program install)"
 	XBPS_FETCH="$(check_xbps_program fetch)"
@@ -78,14 +81,14 @@ check_xbps_program() {
 	elif command -v "xbps-$prog.static" >/dev/null 2>&1; then
 		echo "xbps-$prog.static"
 	else
-		LOG "xmirror: could not find xbps-$prog or xbps-$prog.static"
+		log "xmirror: could not find xbps-$prog or xbps-$prog.static"
 		exit 1
 	fi
 }
 
 check_root() {
 	if [ "$(id -u)" != 0 ]; then
-		LOG "must be run as root"
+		log "must be run as root"
 		exit 1
 	fi
 }
@@ -109,26 +112,26 @@ get_mirrors() {
 	local oldsha newsha fetchfail prefetched
 
 	if [ -z "$NOFETCH" ]; then
-		NEWLIST=$(mktemp -t xmirror-list-XXXXXXXX || exit 1)
+		NEWLIST=$(mktemp -t xmirror-list-XXXXXXXX) || exit 1
 
 		oldsha=$($XBPS_DIGEST "${ROOTDIR}/usr/share/xmirror/mirrors.lst")
 		if $XBPS_FETCH -o "$NEWLIST" "$MIRRORURL" &>/dev/null; then
 			# xbps-fetch won't download anything if the file is identical to one it's already downloaded
-			if [ "$(wc -c "$NEWLIST" | cut -d' ' -f1)" -eq 0 ]; then
-				prefetched=1
-			else
+			if [ -s "$NEWLIST" ]; then
 				newsha=$($XBPS_DIGEST "$NEWLIST") || fetchfail=1
+			else
+				prefetched=1
 			fi
 		else
 			fetchfail=1
 		fi
 
 		if [ -n "$fetchfail" ]; then
-			LOG "unable to fetch new mirror list"
+			log "unable to fetch new mirror list"
 		elif [ -n "$prefetched" ] || [ "$oldsha" = "$newsha" ]; then
-			LOG "new mirror list has no changes, not updating"
+			: log "new mirror list has no changes, not updating"
 		else
-			LOG "updating mirrorlist in ${ROOTDIR}/usr/share/xmirror"
+			log "updating mirrorlist in ${ROOTDIR}/usr/share/xmirror"
 			cp --no-preserve=mode,ownership --backup=simple --suffix=.old \
 				"$NEWLIST" "${ROOTDIR}/usr/share/xmirror/mirrors.lst"
 		fi
@@ -150,18 +153,16 @@ get_mirrors() {
 }
 
 write_mirrors_int() {
-	local CONF_FILES RET REPOSITORY="$1"
-	CONF_FILES="$(find "${ROOTDIR}"/usr/share/xbps.d/ -name '*-repository-*.conf' | sort -u | sed 's|/usr/share|/etc|g')"
+	local FILES REPOSITORY="$1"
+	FILES="$(find "${ROOTDIR}"/usr/share/xbps.d/ -name '*-repository-*.conf' | sort -u | sed 's|/usr/share|/etc|g')"
 	DIALOG --cr-wrap --yesno "${BOLD}The following operations will be executed:${RESET}\n\n
 The current mirror will be switched to: ${RED}${REPOSITORY}${RESET}
-The following files in ${BOLD}${ROOTDIR}/etc/xbps.d${RESET} will be overwritten, if they exist:
-${RED}${CONF_FILES// /$'\n'}${RESET}\n\n
+The following files in ${BOLD}${ROOTDIR}/etc/xbps.d${RESET} will be created or overwritten, if they exist:
+${RED}${FILES// /$'\n'}${RESET}\n\n
 ${BOLD}Do you want to continue?${RESET}" 20 80 || return
 
-	write_mirrors "$REPOSITORY"
-	RET="$?"
 	{
-		if [ "$RET" -eq 0 ]; then
+		if write_mirrors "$REPOSITORY"; then
 			printf "\nMirror successfully changed to %s!\n" "$REPOSITORY"
 		else
 			for f in "${ROOTDIR}/etc/xbps.d"/*-repository-*.conf.old; do
@@ -170,25 +171,26 @@ ${BOLD}Do you want to continue?${RESET}" 20 80 || return
 			printf "\nMirror update failed! See log above for details.\n"
 		fi
 	} |& DIALOG --title " Updating mirror... " --programbox 16 80
-	DIE "$RET"
+	die
 }
 
 write_mirrors() {
 	set -e
 	local REPOSITORY="$1"
-	if ! [[ "$REPOSITORY" =~ "http://"* || "$REPOSITORY" =~ "https://"* ]]; then
-		LOG "warning: mirror protocol not specified, assuming http://"
+	if ! [[ "$REPOSITORY" = *"://"* ]]; then
+		log "warning: mirror protocol not specified, assuming http://"
 		REPOSITORY="http://$REPOSITORY"
 	fi
 	mkdir -p "${ROOTDIR}/etc/xbps.d"
 	cp --no-preserve=mode,ownership --backup=simple --suffix=.old \
 		"${ROOTDIR}/usr/share/xbps.d"/*-repository-*.conf "${ROOTDIR}/etc/xbps.d/"
-	sed -i "s|https://repo-default.voidlinux.org|${REPOSITORY%/}|g" "${ROOTDIR}/etc/xbps.d"/*
+	sed -i "s|https://repo-default.voidlinux.org|${REPOSITORY%/}|g" "${ROOTDIR}/etc/xbps.d"/*-repository-*.conf
 	$XBPS_INSTALL -S -r "${ROOTDIR}"
+	set +e
 }
 
 reset_mirrors_int() {
-	local FILES RET
+	local FILES
 	FILES="$(find "${ROOTDIR}"/usr/share/xbps.d/ -name '*-repository-*.conf' | sort -u | sed 's|/usr/share|/etc|g')"
 	DIALOG --cr-wrap --yesno "${BOLD}The following operations will be executed:${RESET}\n\n
 The current mirror will be reset to the default.
@@ -196,23 +198,23 @@ The following files in ${BOLD}${ROOTDIR}/etc/xbps.d${RESET} will be removed, if 
 ${RED}${FILES// /$'\n'}${RESET}\n\n
 ${BOLD}Do you want to continue?${RESET}" 20 80 || return
 
-	reset_mirrors "$CONF_FILES"
-	RET="$?"
 	{
-		if [ "$RET" -eq 0 ]; then
+		if reset_mirrors "$FILES"; then
 			printf "\nMirror successfully reset!\n"
 		else
 			printf "\nMirror reset failed! See log above for details.\n"
 		fi
 	} |& DIALOG --title " Resetting mirror to default... " --programbox 16 80
-	DIE "$RET"
+	die
 }
 
 reset_mirrors() {
 	local FILES="$1"
 	set -e
+	# shellcheck disable=SC2086
 	rm -f $FILES
 	$XBPS_INSTALL -S -r "${ROOTDIR}"
+	set +e
 }
 
 region_menu() {
@@ -223,7 +225,7 @@ region_menu() {
 
 	sel="$(cat "$ANSWER")"
 	case $sel in
-		"Exit"|'') DIE 0 ;;
+		"Exit"|'') die 0 ;;
 		"Default") reset_mirrors_int ;;
 		*) mirror_menu "$sel" ;;
 	esac
@@ -256,6 +258,7 @@ mirror_menu() {
 
 TEMP=$(getopt -o 'l:r:s:dnvh' --long 'mirror-list:,rootdir:,set:,default,no-fetch,version,help' -n xmirror -- "$@")
 
+# shellcheck disable=SC2181
 if [ $? -ne 0 ]; then
 	usage
 fi
@@ -281,28 +284,28 @@ check_root
 
 if [ -n "$SETMIRROR" ]; then
 	check_required_programs
-	LOG "updating mirror to $SETMIRROR..."
+	log "updating mirror to $SETMIRROR..."
 	if write_mirrors "$SETMIRROR"; then
-		LOG "mirror successfully updated to $SETMIRROR."
+		log "mirror successfully updated to $SETMIRROR."
 		exit 0
 	else
 		for f in "${ROOTDIR}/etc/xbps.d"/*-repository-*.conf.old; do
 			mv "$f" "${f%.old}"
 		done
-		LOG "mirror update failed."
+		log "mirror update failed."
 		exit 1
 	fi
 fi
 
 if [ -n "$RESETMIRROR" ]; then
 	check_required_programs
-	LOG "xmirror: resetting mirror..."
+	log "xmirror: resetting mirror..."
 	FILES="$(find "${ROOTDIR}"/usr/share/xbps.d/ -name '*-repository-*.conf' | sort -u | sed 's|/usr/share|/etc|g')"
 	if reset_mirrors "$FILES"; then
-		LOG "xmirror: mirror successfully reset."
+		log "xmirror: mirror successfully reset."
 		exit 0
 	else
-		LOG "xmirror: mirror reset failed."
+		log "xmirror: mirror reset failed."
 		exit 1
 	fi
 fi
@@ -315,11 +318,11 @@ declare -a regions
 
 check_required_programs dialog
 
-trap "DIE" INT TERM QUIT
+trap "die" INT TERM QUIT
 
 get_mirrors
 
-ANSWER=$(mktemp -t xmirror-XXXXXXXX || exit 1)
+ANSWER=$(mktemp -t xmirror-XXXXXXXX) || exit 1
 
 DIALOG --title "${BOLD} Void Linux Mirror Selection Wizard ${RESET}" --msgbox "$INITMSG" 15 80
 
@@ -327,5 +330,5 @@ while true; do
 	region_menu
 done
 
-DIE 0
+die 0
 # vim: set ft=bash:
