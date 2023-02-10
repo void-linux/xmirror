@@ -48,7 +48,7 @@ EOF
 DIALOG() {
     rm -f "$ANSWER"
     dialog --colors --keep-tite --no-shadow --no-mouse \
-        --backtitle "${BOLD}${WHITE}Void Linux Mirror Selector -- https://www.voidlinux.org (@@VERSION@@)${RESET}" \
+        --backtitle "${BOLD}${WHITE}Void Linux Mirror Selector -- https://www.voidlinux.org (v@@VERSION@@)${RESET}" \
         --cancel-label "Back" --aspect 20 "$@" 2>"$ANSWER"
     return $?
 }
