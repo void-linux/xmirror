@@ -149,7 +149,7 @@ ${BOLD}Do you want to continue?${RESET}" 20 80 || return
 			printf "\nMirror update failed! See log above for details.\n"
 		fi
 	} |& DIALOG --title " Updating mirror... " --programbox 16 80
-	die
+	exit 0
 }
 
 write_mirrors() {
@@ -183,7 +183,7 @@ ${BOLD}Do you want to continue?${RESET}" 20 80 || return
 			printf "\nMirror reset failed! See log above for details.\n"
 		fi
 	} |& DIALOG --title " Resetting mirror to default... " --programbox 16 80
-	die
+	exit 0
 }
 
 reset_mirrors() {
@@ -203,7 +203,7 @@ region_menu() {
 
 	sel="$(cat "$ANSWER")"
 	case $sel in
-		"Exit"|'') die 0 ;;
+		"Exit"|'') exit 0 ;;
 		"Default") reset_mirrors_int ;;
 		*) mirror_menu "$sel" ;;
 	esac
@@ -296,7 +296,7 @@ declare -a regions
 
 check_required_programs dialog
 
-trap "die" INT TERM QUIT
+trap "die" INT TERM QUIT EXIT
 
 get_mirrors
 
@@ -307,6 +307,4 @@ DIALOG --title "${BOLD} Void Linux Mirror Selection Wizard ${RESET}" --msgbox "$
 while true; do
 	region_menu
 done
-
-die 0
 # vim: set ft=bash:
