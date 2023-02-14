@@ -262,6 +262,7 @@ check_root
 
 if [ -n "$SETMIRROR" ]; then
 	check_required_programs
+	SETMIRROR="${SETMIRROR%%/current*}"
 	log "updating mirror to $SETMIRROR..."
 	if write_mirrors "$SETMIRROR"; then
 		log "mirror successfully updated to $SETMIRROR."
