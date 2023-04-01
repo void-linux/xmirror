@@ -21,6 +21,7 @@ install: all
 	install -Dm 755 xmirror -t $(DESTDIR)$(PREFIX)/bin
 	install -Dm 644 mirrors.lst -t $(DESTDIR)$(PREFIX)/share/xmirror
 	install -Dm 644 completions/_xmirror -t $(DESTDIR)$(PREFIX)/share/zsh/site-functions
+	install -Dm 644 completions/xmirror.fish -t $(DESTDIR)/$(PREFIX)/share/fish/vendor_completions.d
 	install -Dm 644 xmirror.1 -t $(DESTDIR)$(PREFIX)/share/man/man1
 
 clean:
