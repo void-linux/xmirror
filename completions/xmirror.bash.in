@@ -1,0 +1,38 @@
+#!/bin/bash
+
+_xmirror_completion() {
+	local cur prev
+	local short_opts='-d -h -l -n -r -s -v'
+	local long_opts='--default --help --mirror-list --no-fetch --rootdir
+		--set --version'
+
+	_init_completion || return
+
+	case "$prev" in
+		-d | --default | -n | --no-fetch) ;;
+		-v | --version | -h | --help) return ;;
+		-r | --rootdir) _cd && return ;;
+		-l | --mirror-list) _filedir && return ;;
+		-s | --set)
+			COMPREPLY=($(compgen -W "$(_list_mirrors)" -- "$cur"))
+			return ;;
+	esac
+
+	COMPREPLY=($(compgen -W "$long_opts $short_opts" -- "$cur"))
+}
+
+_list_mirrors() {
+	local mirrors
+
+	while read -r line; do
+		[[ "$line" = '#'* ]] && continue
+
+		while IFS=$'\t' read -r region url rest; do
+			mirrors+=("${url//:/\\:}")
+		done <<< "$line"
+	done < @@PREFIX@@/share/xmirror/mirrors.lst
+
+	echo "${mirrors[*]}"
+}
+
+complete -F _xmirror_completion xmirror
