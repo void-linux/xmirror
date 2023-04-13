@@ -2,3 +2,4 @@ xmirror
 .help
 _site/
 completions/_xmirror
+completions/xmirror.fish

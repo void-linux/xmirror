@@ -12,7 +12,7 @@ xmirror: xmirror.in
 	chmod +x $@+
 	mv $@+ $@
 
-completions: completions/_xmirror
+completions: completions/_xmirror completions/xmirror.fish
 
 completions/%: completions/%.in
 	sed -e "s,@@PREFIX@@,$(PREFIX),g" $< >$@
@@ -25,7 +25,7 @@ install: all
 	install -Dm 644 xmirror.1 -t $(DESTDIR)$(PREFIX)/share/man/man1
 
 clean:
-	rm -rf xmirror _site completions/_xmirror
+	rm -rf xmirror _site completions/_xmirror completions/xmirror.fish
 
 README: xmirror.1
 	mandoc -Tutf8 $< | col -bx >$@
