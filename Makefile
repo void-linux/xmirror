@@ -3,21 +3,26 @@ DESTDIR   ?=
 PREFIX    ?= /usr/local
 MIRRORURL ?= https://xmirror.voidlinux.org/raw/mirrors.lst
 
-.PHONY: install clean deploy
+.PHONY: completions install clean deploy
 
 xmirror: xmirror.in
-	sed -e "s/@@VERSION@@/$(VERSION)/g; s,@@MIRRORURL@@,$(MIRRORURL),g" $@.in >$@+
+	sed -e "s/@@VERSION@@/$(VERSION)/g; s,@@MIRRORURL@@,$(MIRRORURL),g" $< >$@+
 	chmod +x $@+
 	mv $@+ $@
 
-install: xmirror
+completions/_xmirror: completions/_xmirror.in
+	sed -e "s,@@PREFIX@@,$(PREFIX),g" $< >$@
+
+completions: completions/_xmirror
+
+install: xmirror completions
 	install -Dm 755 xmirror -t $(DESTDIR)$(PREFIX)/bin
 	install -Dm 644 mirrors.lst -t $(DESTDIR)$(PREFIX)/share/xmirror
 	install -Dm 644 completions/_xmirror -t $(DESTDIR)$(PREFIX)/share/zsh/site-functions
 	install -Dm 644 xmirror.1 -t $(DESTDIR)$(PREFIX)/share/man/man1
 
 clean:
-	rm -rf xmirror _site
+	rm -rf xmirror _site completions/_xmirror
 
 README: xmirror.1
 	mandoc -Tutf8 $< | col -bx >$@

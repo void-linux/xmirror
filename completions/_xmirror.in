@@ -1,5 +1,17 @@
 #compdef xmirror
 
+_xmirrors() {
+	local mirror_lst
+	for line in "${(@f)"$(<@@PREFIX@@/share/xmirror/mirrors.lst)"}"
+	{
+		[[ "$line" = '#'* ]] && continue
+		while IFS=$'\t' read -r region url location tier rest; do
+			mirror_lst+=("${url//:/\\:}":"$location, Tier $tier")
+		done <<< "$line"
+	}
+	_describe -t mirrors "available mirrors" mirror_lst
+}
+
 _arguments -s : \
 	+ '(meta)' \
 	'(common interactive noninteractive)'{-h,--help}'[Show help for this command and exit]' \
@@ -11,4 +23,4 @@ _arguments -s : \
 	'(meta noninteractive)'{-n,--no-fetch}'[Don'"'"'t attempt to update the mirror list]' \
 	+ '(noninteractive)' \
 	'(meta interactive)'{-d,--default}'[Reset the current mirror to the default]' \
-	'(meta interactive)'{-s,--set}'[Set the current mirror]:( )'
+	'(meta interactive)'{-s,--set}'[Set the current mirror]:mirror:_xmirrors'
