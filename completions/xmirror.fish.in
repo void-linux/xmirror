@@ -1,19 +1,19 @@
 complete -c xmirror -f
 
 function __xmirror_complete_mirrors
-    string match -vr '^\s*#' <@@PREFIX@@/share/xmirror/mirrors.lst | while read -l line
-        set -l values (string split \t -- $line)
-        # Mirror url, location, and tier
-        echo -- $values[2]\t$values[3], Tier $values[4]
-    end
+	string match -vr '^\s*#' <@@PREFIX@@/share/xmirror/mirrors.lst | while read -l line
+		set -l values (string split \t -- $line)
+		# Mirror url, location, and tier
+		echo -- $values[2]\t$values[3], Tier $values[4]
+	end
 end
 
 function __xmirror_no_interactive_opts
-    not __fish_seen_argument -s l -l mirror-list -s n -l no-fetch
+	not __fish_seen_argument -s l -l mirror-list -s n -l no-fetch
 end
 
 function __xmirror_no_noninteractive_opts
-    not __fish_seen_argument -s d -l default -s s -l set
+	not __fish_seen_argument -s d -l default -s s -l set
 end
 
 complete -c xmirror -s h -l help -d 'Display help and exit'
