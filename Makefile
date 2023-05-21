@@ -1,4 +1,4 @@
-VERSION   ?= 0.2
+VERSION   ?= 0.3
 DESTDIR   ?=
 PREFIX    ?= /usr/local
 MIRRORURL ?= https://xmirror.voidlinux.org/raw/mirrors.lst
