@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Mirrors - Void Linux</title>
+
+	<meta property="og:title" content="Mirrors">
+	<meta property="og:site_name" content="Void Linux">
+	<meta property="og:image:url" content="/assets/voidlogo.png">
+	<meta property="og:image:alt" content="Void Linux Logo">
+	<meta name="theme-color" content="#478061">
+	<link rel="icon" type="image/png" href="/assets/favicon.png">
+
+	<link rel="stylesheet" href="/assets/bootstrap.min.css">
+	<link rel="stylesheet" href="/assets/screen.css">
+	<link rel="stylesheet" href="/assets/misc.css">
+	<link rel="stylesheet" href="/assets/font-ubuntu.css">
+
+	<script src="/assets/jquery.min.js"></script>
+	<script src="/assets/bootstrap.min.js"></script>
+</head>
+<body>
+	<nav class="navbar navbar-default navbar-inverse navbar-sticky" role="navigation">
+		<div class="container">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#void-collapsed-navbar">
+					<span class="sr-only">Toggle navigation</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+			</div>
+			<div class="collapse navbar-right navbar-collapse" id="void-collapsed-navbar">
+				<ul class="nav navbar-nav">
+					<li><a href="https://voidlinux.org/">Home</a></li>
+					<li><a href="https://voidlinux.org/news/">News</a></li>
+					<li><a href="https://voidlinux.org/download/">Download</a></li>
+					<li><a href="https://voidlinux.org/packages/">Packages</a></li>
+					<li><a href="https://voidlinux.org/acknowledgments/">Acknowledgments</a></li>
+					<li><a href="https://docs.voidlinux.org">Documentation</a></li>
+					<li><a href="https://man.voidlinux.org/">Manual Pages</a></li>
+					<li><a href="https://github.com/void-linux">GitHub</a></li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+
+	<div class="container">
+	<h1>Void Linux Mirrors</h1>
+	<p>
+		Void Linux maintains mirrors in several geographic regions for users.
+		A fresh install will default to <a href="https://repo-default.voidlinux.org">repo-default.voidlinux.org</a>,
+		which may map to any Tier 1 mirror, but you may have a better experience by
+		<a href="https://docs.voidlinux.org/xbps/repositories/mirrors/changing.html">selecting a different mirror</a>.
+	</p>
+
+	<h2>Available Mirrors</h2>
+
+	<p>
+		The status of all listed mirrors can be viewed on Void's
+		<a href="https://grafana.voidlinux.org/d/cLraC-XMk/mirrors-status">Grafana dashboard</a>.
+	</p>
+
+	<h3 id="tier1">Tier 1 mirrors</h2>
+
+	<p>
+		Tier 1 mirrors are maintained by the Void Linux Infrastructure Team.
+		These mirrors sync directly from the build servers and will always have the latest packages available.
+	</p>
+
+<div class="container">
+{tier1}
+</div>
+
+	<h3 id="tier2">Tier 2 mirrors</h2>
+	<p>
+		Tier 2 mirrors sync from a nearby Tier 1 mirror when possible.
+		These mirrors are not managed by Void and do not have any guarantees of freshness or completeness of packages,
+		nor are they required to sync every available architecture or sub-repository.
+	</p>
+
+<div class="container">
+{tier2}
+</div>
+
+	<h3 id="tor">Tor Mirrors</h2>
+
+	<p>
+		Void Linux is also mirrored on the Tor network.
+		See <a href="https://docs.voidlinux.org/xbps/repositories/mirrors/tor.html">Using Tor Mirrors</a> for more information.
+	</p>
+
+	<h2 id="changing">Changing the Selected Mirror</h2>
+
+	<p>
+		See the <a href="https://docs.voidlinux.org/xbps/repositories/mirrors/changing.html">Void Linux Handbook</a>
+		for instructions.
+	</p>
+
+	<h2 id="creating">Creating a Mirror</h2>
+	<p>
+		If you'd like to set up a mirror, and are confident you can keep it reasonably up-to-date,
+		follow one of the many guides available for mirroring with <a href="https://man.voidlinux.org/rsync.1">rsync(1)</a>.
+		You should be syncing from <code>rsync://repo-sync.voidlinux.org/voidlinux/</code>.
+		To list your mirror on this site, submit a pull request to
+		<a href="https://github.com/void-linux/xmirror">the xmirror repository</a>
+		that adds your mirror to <code>mirrors.yaml</code>.
+	</p>
+	<p>
+		A full mirror requires around 1TB of storage.
+		It is also possible to mirror only part of the repositories.
+		Excluding debug packages is one way of decreasing the load on the Tier 1 mirrors,
+		with low impact on users.
+	</p>
+	<p>
+		Please keep in mind that we pay bandwidth for all data sent out from the Tier 1 mirrors.
+		You can respect this by only mirroring if your use case for your mirror will offset the network throughput consumed by your mirror syncing.
+	</p>
+	</div>
+	<div class="container col-md-8 col-md-offset-2">
+		<hr>
+		<footer class="footer">
+			<p class="text-center">Copyright 2023 <a href="https://github.com/orgs/void-linux/people">VoidLinux contributors</a></p>
+			<p class="text-center">Linux® is a registered trademark of Linus Torvalds (<a href="https://www.linuxfoundation.org/programs/legal/trademark/attribution">info</a>)</p>
+		</footer>
+	</div>
+</body>
+</html>

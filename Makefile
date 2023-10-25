@@ -2,6 +2,7 @@ VERSION   ?= 0.3
 DESTDIR   ?=
 PREFIX    ?= /usr/local
 MIRRORURL ?= https://xmirror.voidlinux.org/raw/mirrors.lst
+PYTHON    ?= python3
 
 .PHONY: all completions install clean deploy
 
@@ -31,13 +32,5 @@ clean:
 README: xmirror.1
 	mandoc -Tutf8 $< | col -bx >$@
 
-deploy: mirrors.lst
-	mkdir -p _site/raw
-	# a hacky but simple homepage that redirects to the manpage
-	@echo 'generating redirect page at _site/index.html'
-	@printf '<!DOCTYPE html><html><head><meta http-equiv="refresh" content="0; url=' > _site/index.html
-	@printf "'https://man.voidlinux.org/xmirror.1'" >> _site/index.html
-	@printf '" /></head>' >> _site/index.html
-	@printf '<body><p><a href="https://man.voidlinux.org/xmirror.1">Redirect</a></p></body>' >> _site/index.html
-	@printf '</html>\n' >> _site/index.html
-	cp mirrors.lst _site/raw/
+deploy: mirrors.yaml web/index.html.in
+	$(PYTHON) web/generate-site.py _site

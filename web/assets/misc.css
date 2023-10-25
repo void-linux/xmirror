@@ -1,0 +1,99 @@
+a {
+	color:#478061;
+}
+a:hover {
+	text-decoration:none;
+	color:black;
+}
+.navbar {
+	background-color:#478061;
+	border:0;
+	z-index: 1;
+}
+.nav li:hover {
+	background-color: black;
+}
+h1[id], h2[id], h3[id], h4[id], h5[id], h6[id] {
+	padding-top:0.5em;
+}
+.btn-green {
+	color: #fff;
+	background-color: #478061;
+	border-color: #478061;
+}
+.btn-green:hover {
+	color: #fff;
+	background-color: black;
+	border-color: black;
+}
+
+
+@media (prefers-color-scheme: dark) {
+  body {
+    color: #ccc;
+    background-color: #222;
+  }
+  h1, h2, h3, h4, h5, h6 { color: #ccc; }
+  a {
+    color: #62b086;
+  }
+  a:hover {
+    color: #ccc;
+  }
+  hr {
+    border-top: 1px solid #888;
+  }
+  code {
+    background-color: inherit;
+    color: white;
+  }
+  pre {
+    background-color: #404040;
+    color: #d0d0d0;
+  }
+  .nav li:hover {
+    background-color: #222;
+  }
+  .navbar {
+    background-color: #295340;
+  }
+}
+
+
+table {
+	border-collapse: collapse;
+	overflow-y: auto;
+	border: 1px #478061 solid;
+	table-layout: fixed;
+}
+
+table td {
+	padding: 6px 20px;
+}
+
+table thead {
+	background: #478061;
+	color: #fff;
+}
+
+table thead th {
+	font-weight: 700;
+	text-align: center;
+	padding: 6px 20px;
+}
+
+thead th:nth-child(1) {
+	width: 50%;
+}
+
+thead th:nth-child(2) {
+	width: 20%;
+}
+
+thead th:nth-child(3) {
+	width: 30%;
+}
+
+tbody tr:nth-child(2n) {
+	background: #2c2c2c;
+}
