@@ -1,0 +1,160 @@
+- base_url: https://repo-fi.voidlinux.org/
+  region: EU
+  location: Helsinki, Finland
+  tier: 1
+  enabled: true
+- base_url: https://repo-de.voidlinux.org/
+  region: EU
+  location: Frankfurt, Germany
+  tier: 1
+  enabled: true
+- base_url: https://repo-us.voidlinux.org/
+  region: NA
+  location: Kansas City, USA
+  tier: 1
+  enabled: false
+- base_url: https://repo-fastly.voidlinux.org/
+  region: World
+  location: Fastly Global CDN
+  tier: 1
+  enabled: true
+- base_url: https://mirrors.servercentral.com/voidlinux/
+  region: NA
+  location: Chicago, USA
+  tier: 1
+  enabled: true
+- base_url: https://mirror.ps.kz/voidlinux/
+  region: AS
+  location: Almaty, Kazakhstan
+  tier: 2
+  enabled: true
+- base_url: https://mirror.nju.edu.cn/voidlinux/
+  region: AS
+  location: China
+  tier: 2
+  enabled: true
+- base_url: https://mirrors.bfsu.edu.cn/voidlinux/
+  region: AS
+  location: Beijing, China
+  tier: 2
+  enabled: true
+- base_url: https://mirrors.cnnic.cn/voidlinux/
+  region: AS
+  location: Beijing, China
+  tier: 2
+  enabled: true
+- base_url: https://mirrors.tuna.tsinghua.edu.cn/voidlinux/
+  region: AS
+  location: Beijing, China
+  tier: 2
+  enabled: true
+- base_url: https://mirror.sjtu.edu.cn/voidlinux/
+  region: AS
+  location: Shanghai, China
+  tier: 2
+  enabled: true
+- base_url: https://repo.jing.rocks/voidlinux/
+  region: AS
+  location: Tokyo, Japan
+  tier: 2
+  enabled: true
+- base_url: https://void.webconverger.org/
+  region: AS
+  location: Singapore
+  tier: 2
+  enabled: true
+- base_url: http://ftp.dk.xemacs.org/voidlinux/
+  region: EU
+  location: Denmark
+  tier: 2
+  enabled: true
+- base_url: https://mirrors.dotsrc.org/voidlinux/
+  region: EU
+  location: Denmark
+  tier: 2
+  enabled: true
+- base_url: https://ftp.cc.uoc.gr/mirrors/linux/voidlinux/
+  region: EU
+  location: Greece
+  tier: 2
+  enabled: true
+- base_url: https://quantum-mirror.hu/mirrors/pub/voidlinux/
+  region: EU
+  location: Hungary
+  tier: 2
+  enabled: true
+- base_url: https://voidlinux.mirror.garr.it/
+  region: EU
+  location: Italy
+  tier: 2
+  enabled: true
+- base_url: https://void.cijber.net/
+  region: EU
+  location: Amsterdam, Netherlands
+  tier: 2
+  enabled: true
+- base_url: https://void.sakamoto.pl/
+  region: EU
+  location: Warsaw, Poland
+  tier: 2
+  enabled: true
+- base_url: http://ftp.debian.ru/mirrors/voidlinux/
+  region: EU
+  location: Russia
+  tier: 2
+  enabled: true
+- base_url: https://mirror.yandex.ru/mirrors/voidlinux/
+  region: EU
+  location: Russia
+  tier: 2
+  enabled: true
+- base_url: https://ftp.lysator.liu.se/pub/voidlinux/
+  region: EU
+  location: Sweden
+  tier: 2
+  enabled: true
+- base_url: https://mirror.accum.se/mirror/voidlinux/
+  region: EU
+  location: Sweden
+  tier: 2
+  enabled: true
+- base_url: https://mirror.puzzle.ch/voidlinux/
+  region: EU
+  location: Bern, Switzerland
+  tier: 2
+  enabled: true
+- base_url: https://mirror.vofr.net/voidlinux/
+  region: NA
+  location: California, USA
+  tier: 2
+  enabled: true
+- base_url: https://mirror2.sandyriver.net/pub/voidlinux/
+  region: NA
+  location: Kentucky, USA
+  tier: 2
+  enabled: true
+- base_url: https://mirror.clarkson.edu/voidlinux/
+  region: NA
+  location: New York, USA
+  tier: 2
+  enabled: true
+- base_url: https://mirror.aarnet.edu.au/pub/voidlinux/
+  region: OC
+  location: Canberra, Australia
+  tier: 2
+  enabled: true
+- base_url: https://ftp.swin.edu.au/voidlinux/
+  region: OC
+  location: Melbourne, Australia
+  tier: 2
+  enabled: true
+- base_url: https://voidlinux.com.br/repo/
+  region: SA
+  location: Ouro Preto, Brazil
+  tier: 2
+  enabled: true
+- base_url: http://void.chililinux.com/voidlinux/
+  region: SA
+  location: Pimenta Bueno, Brazil
+  tier: 2
+  enabled: true
