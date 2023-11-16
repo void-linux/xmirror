@@ -27,39 +27,6 @@ h1[id], h2[id], h3[id], h4[id], h5[id], h6[id] {
 	border-color: black;
 }
 
-
-@media (prefers-color-scheme: dark) {
-  body {
-    color: #ccc;
-    background-color: #222;
-  }
-  h1, h2, h3, h4, h5, h6 { color: #ccc; }
-  a {
-    color: #62b086;
-  }
-  a:hover {
-    color: #ccc;
-  }
-  hr {
-    border-top: 1px solid #888;
-  }
-  code {
-    background-color: inherit;
-    color: white;
-  }
-  pre {
-    background-color: #404040;
-    color: #d0d0d0;
-  }
-  .nav li:hover {
-    background-color: #222;
-  }
-  .navbar {
-    background-color: #295340;
-  }
-}
-
-
 table {
 	border-collapse: collapse;
 	overflow-y: auto;
@@ -95,5 +62,39 @@ thead th:nth-child(3) {
 }
 
 tbody tr:nth-child(2n) {
-	background: #2c2c2c;
+	background: #fafafa;
+}
+
+@media (prefers-color-scheme: dark) {
+  body {
+    color: #ccc;
+    background-color: #222;
+  }
+  h1, h2, h3, h4, h5, h6 { color: #ccc; }
+  a {
+    color: #62b086;
+  }
+  a:hover {
+    color: #ccc;
+  }
+  hr {
+    border-top: 1px solid #888;
+  }
+  code {
+    background-color: inherit;
+    color: white;
+  }
+  pre {
+    background-color: #404040;
+    color: #d0d0d0;
+  }
+  .nav li:hover {
+    background-color: #222;
+  }
+  .navbar {
+    background-color: #295340;
+  }
+  tbody tr:nth-child(2n) {
+  	background: #2c2c2c;
+  }
 }
