@@ -17,9 +17,6 @@
 	<link rel="stylesheet" href="/assets/screen.css">
 	<link rel="stylesheet" href="/assets/misc.css">
 	<link rel="stylesheet" href="/assets/font-ubuntu.css">
-
-	<script src="/assets/jquery.min.js"></script>
-	<script src="/assets/bootstrap.min.js"></script>
 </head>
 <body>
 	<nav class="navbar navbar-default navbar-inverse navbar-sticky" role="navigation">
@@ -126,5 +123,8 @@
 			<p class="text-center">Linux® is a registered trademark of Linus Torvalds (<a href="https://www.linuxfoundation.org/programs/legal/trademark/attribution">info</a>)</p>
 		</footer>
 	</div>
+	<script src="/assets/jquery.min.js"></script>
+	<script src="/assets/bootstrap.min.js"></script>
+	<script src="/assets/live-metrics.js"></script>
 </body>
 </html>
