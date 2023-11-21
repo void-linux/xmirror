@@ -27,47 +27,52 @@ h1[id], h2[id], h3[id], h4[id], h5[id], h6[id] {
 	border-color: black;
 }
 
-table {
+.mirrortbl {
 	border-collapse: collapse;
 	overflow-y: auto;
 	border: 1px #478061 solid;
-	table-layout: fixed;
 }
 
-table td {
+.mirrortbl td {
 	padding: 6px 20px;
 }
 
-table thead {
+.mirrortbl thead {
 	background: #478061;
 	color: #fff;
 }
 
-table thead th {
+.mirrortbl thead th {
 	font-weight: 700;
 	text-align: center;
 	padding: 6px 20px;
 }
 
-thead th:nth-child(1) {
-	width: 50%;
+.mirrortbl tr:nth-child(2n) {
+	background: #eee;
 }
 
-thead th:nth-child(2) {
-	width: 20%;
+.time-muted {
+	color: #666;
+	background-color: #ddd;
 }
 
-thead th:nth-child(3) {
-	width: 30%;
+.time-red {
+	color: #fff;
+	background-color: rgb(227, 46, 66);
 }
 
-tbody tr:nth-child(2n) {
-	background: #fafafa;
+.time-yellow {
+	background-color: rgb(234, 184, 57);
+}
+
+.time-green {
+	background-color: rgb(115, 191, 105);
 }
 
 @media (prefers-color-scheme: dark) {
   body {
-    color: #ccc;
+    color: #ddd;
     background-color: #222;
   }
   h1, h2, h3, h4, h5, h6 { color: #ccc; }
@@ -94,7 +99,27 @@ tbody tr:nth-child(2n) {
   .navbar {
     background-color: #295340;
   }
-  tbody tr:nth-child(2n) {
+  .mirrortbl tbody tr:nth-child(2n) {
   	background: #2c2c2c;
+  }
+
+  .time-muted {
+  	color: #aaa;
+  	background-color: #444;
+  }
+
+  .time-red {
+	color: #000;
+	background-color: #d73c50;
+  }
+
+  .time-yellow {
+	color: #222;
+  	background-color: rgb(234, 184, 57);
+  }
+
+  .time-green {
+	color: #222;
+  	background-color: rgb(115, 191, 105);
   }
 }

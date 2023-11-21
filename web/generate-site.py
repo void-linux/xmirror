@@ -11,7 +11,7 @@ import yaml
 
 
 tabletmpl = """
-<table>
+<table class="mirrortbl">
 <thead>
 <tr>
   <th>Mirror</th>
