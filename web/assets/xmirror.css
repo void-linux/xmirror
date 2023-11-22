@@ -1,0 +1,39 @@
+.time-muted {
+	color: #666;
+	background-color: #ddd;
+}
+
+.time-red {
+	color: #fff;
+	background-color: rgb(227, 46, 66);
+}
+
+.time-yellow {
+	background-color: rgb(234, 184, 57);
+}
+
+.time-green {
+	background-color: rgb(115, 191, 105);
+}
+
+@media (prefers-color-scheme: dark) {
+	.time-muted {
+		color: #aaa;
+		background-color: #444;
+	}
+
+	.time-red {
+		color: #000;
+		background-color: #d73c50;
+	}
+
+	.time-yellow {
+		color: #222;
+		background-color: rgb(234, 184, 57);
+	}
+
+	.time-green {
+		color: #222;
+		background-color: rgb(115, 191, 105);
+	}
+}

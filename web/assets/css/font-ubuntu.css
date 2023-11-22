@@ -1,8 +1,8 @@
 @font-face {
   font-family: 'Ubuntu';
   font-style: normal;
-  font-weight: 300;
-  src: local('Ubuntu Light'), local('Ubuntu-Light'), url(https://fonts.gstatic.com/s/ubuntu/v11/4iCv6KVjbNBYlgoC1CzjsGyI.ttf) format('truetype');
+  font-weight: 400;
+  src: local('Ubuntu'), local('Ubuntu'), url(https://fonts.gstatic.com/s/ubuntu/v11/4iCv6KVjbNBYlgoC1CzjsGyI.ttf) format('truetype');
 }
 @font-face {
   font-family: 'Ubuntu';

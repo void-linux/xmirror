@@ -8,41 +8,39 @@
 
 	<meta property="og:title" content="Mirrors">
 	<meta property="og:site_name" content="Void Linux">
-	<meta property="og:image:url" content="/assets/voidlogo.png">
+	<meta property="og:image:url" content="/img/voidlogo.png">
 	<meta property="og:image:alt" content="Void Linux Logo">
 	<meta name="theme-color" content="#478061">
-	<link rel="icon" type="image/png" href="/assets/favicon.png">
+	<link rel="icon" type="image/png" href="/img/favicon.png">
 
-	<link rel="stylesheet" href="/assets/bootstrap.min.css">
-	<link rel="stylesheet" href="/assets/screen.css">
-	<link rel="stylesheet" href="/assets/misc.css">
-	<link rel="stylesheet" href="/assets/font-ubuntu.css">
+	<link rel="stylesheet" href="/css/styles.css">
+	<link rel="stylesheet" href="/xmirror.css">
 </head>
 <body>
-	<nav class="navbar navbar-default navbar-inverse navbar-sticky" role="navigation">
+	<header class="navbar">
 		<div class="container">
-			<div class="navbar-header">
-				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#void-collapsed-navbar">
-					<span class="sr-only">Toggle navigation</span>
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-				</button>
-			</div>
-			<div class="collapse navbar-right navbar-collapse" id="void-collapsed-navbar">
-				<ul class="nav navbar-nav">
-					<li><a href="https://voidlinux.org/">Home</a></li>
-					<li><a href="https://voidlinux.org/news/">News</a></li>
-					<li><a href="https://voidlinux.org/download/">Download</a></li>
-					<li><a href="https://voidlinux.org/packages/">Packages</a></li>
-					<li><a href="https://voidlinux.org/acknowledgments/">Acknowledgments</a></li>
-					<li><a href="https://docs.voidlinux.org">Documentation</a></li>
-					<li><a href="https://man.voidlinux.org/">Manual Pages</a></li>
-					<li><a href="https://github.com/void-linux">GitHub</a></li>
-				</ul>
+			<div class="menu-spacer"></div>
+			<input type="checkbox" id="menu-toggle-cb">
+			<label id="menu-toggle" for="menu-toggle-cb" aria-label="Toggle Navigation" onclick>
+				<s class="bar"></s><s class="bar"></s><s class="bar"></s>
+			</label>
+			<div class="menu-wrapper">
+				<nav class="menu-local">
+					<div><a href="https://voidlinux.org/">Home</a></div>
+					<div><a href="https://voidlinux.org/news/">News</a></div>
+					<div><a href="https://voidlinux.org/acknowledgments/">Acknowledgments</a></div>
+					<div><a href="https://voidlinux.org/download/">Download</a></div>
+					<div><a href="https://voidlinux.org/packages/">Packages</a></div>
+				</nav>
+				<nav class="menu-external">
+					<div><a href="https://docs.voidlinux.org/">Documentation</a></div>
+					<div><a href="https://man.voidlinux.org/">Manual Pages</a></div>
+					<div><a href="https://xmirror.voidlinux.org/">Mirrors</a></div>
+					<div><a href="https://github.com/void-linux">GitHub</a></div>
+				</nav>
 			</div>
 		</div>
-	</nav>
+	</header>
 
 	<div class="container">
 	<h1>Void Linux Mirrors</h1>
@@ -116,15 +114,13 @@
 		You can respect this by only mirroring if your use case for your mirror will offset the network throughput consumed by your mirror syncing.
 	</p>
 	</div>
-	<div class="container col-md-8 col-md-offset-2">
-		<hr>
-		<footer class="footer">
-			<p class="text-center">Copyright 2023 <a href="https://github.com/orgs/void-linux/people">VoidLinux contributors</a></p>
-			<p class="text-center">Linux® is a registered trademark of Linus Torvalds (<a href="https://www.linuxfoundation.org/programs/legal/trademark/attribution">info</a>)</p>
-		</footer>
-	</div>
-	<script src="/assets/jquery.min.js"></script>
-	<script src="/assets/bootstrap.min.js"></script>
-	<script src="/assets/live-metrics.js"></script>
+	<footer>
+		<div class="container">
+			<hr>
+			<p>Copyright 2023 <a href="https://github.com/orgs/void-linux/people">VoidLinux contributors</a></p>
+			<p>Linux&reg; is a registered trademark of Linus Torvalds (<a href="https://www.linuxfoundation.org/programs/legal/trademark/attribution">info</a>)</p>
+		</div>
+	</footer>
+	<script src="/js/live-metrics.js"></script>
 </body>
 </html>
