@@ -156,4 +156,4 @@ if __name__ == "__main__":
 	write_html(html, destdir, data)
 
 	# copy site assets
-	copytree(assetdir, destdir / "assets")
+	copytree(assetdir, destdir, dirs_exist_ok=True)
