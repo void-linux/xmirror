@@ -65,7 +65,7 @@
 		These mirrors sync directly from the build servers and will always have the latest packages available.
 	</p>
 
-<div class="container">
+<div class="container tablecontainer">
 {tier1}
 </div>
 
@@ -76,7 +76,7 @@
 		nor are they required to sync every available architecture or sub-repository.
 	</p>
 
-<div class="container">
+<div class="container tablecontainer">
 {tier2}
 </div>
 
