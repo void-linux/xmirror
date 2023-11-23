@@ -74,9 +74,12 @@ a:hover {
 	color: var(--links-hover);
 }
 
+.tablecontainer {
+	overflow-x: auto;
+}
+
 table {
 	border-collapse: collapse;
-	overflow-x: auto;
 	border: 1px var(--table-border-color) solid;
 }
 
