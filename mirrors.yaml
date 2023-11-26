@@ -78,11 +78,6 @@
   location: Greece
   tier: 2
   enabled: true
-- base_url: https://quantum-mirror.hu/mirrors/pub/voidlinux/
-  region: EU
-  location: Hungary
-  tier: 2
-  enabled: true
 - base_url: https://voidlinux.mirror.garr.it/
   region: EU
   location: Italy
