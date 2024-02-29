@@ -45,6 +45,10 @@ regions = {
 }
 
 
+class CsvDialect(csv.excel_tab):
+	lineterminator = "\n"
+
+
 def write_api(destdir: Path, data: list[dict]):
 	apidir = destdir / "v0"
 	apidir.mkdir(parents=True)
@@ -77,7 +81,7 @@ def write_raw(destdir: Path, data: list[dict]):
 	rawdir = destdir / "raw"
 	rawdir.mkdir(parents=True)
 	with (rawdir / "mirrors.lst").open("w") as f:
-		wr = csv.writer(f, dialect="excel-tab")
+		wr = csv.writer(f, dialect=CsvDialect)
 		wr.writerows([[m["region"], m["base_url"], m["location"], m["tier"]] for m in data if m["enabled"]])
 
 
