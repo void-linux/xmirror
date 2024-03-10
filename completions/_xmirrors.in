@@ -1,14 +1,21 @@
 #autoload
 
-local -a mirror_lst
+local -a mirror_lst expl suf
 local line region url location rest
-local -i tier
+local -i tier repos
+
+[[ "$@[-1]" = --repos ]] && shift -p && repos=1 && suf=( -S "" )
 
 for line in ${(f)"$(<@@PREFIX@@/share/xmirror/mirrors.lst)"}; do
 	[[ $line = '#'* ]] && continue
 	while IFS=$'\t' read -r region url location tier rest; do
 		mirror_lst+=("${url//:/\\:}:$location, Tier $tier")
+		if (( repos )) && compset -P ${(b)url}; then
+			_wanted mirror-repositories expl "typical mirror repositories" \
+				compadd "$@" - current{,/musl,aarch64} nonfree multilib{,/nonfree} debug
+			return
+		fi
 	done <<< $line
 done
 
-_describe -t mirrors "available mirrors" mirror_lst "$@" -o nosort
+_describe -t mirrors "available mirrors" mirror_lst "$@" -o nosort "$suf[@]"
