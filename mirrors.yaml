@@ -123,6 +123,11 @@
   location: California, USA
   tier: 2
   enabled: true
+- base_url: https://mirrors.hyperreal.coffee/voidlinux/
+  region: NA
+  location: Chicago, USA
+  tier: 2
+  enabled: true
 - base_url: https://mirror2.sandyriver.net/pub/voidlinux/
   region: NA
   location: Kentucky, USA
