@@ -153,7 +153,6 @@ ${BOLD}Do you want to continue?${RESET}" 20 80 || return
 }
 
 write_mirrors() {
-	set -e
 	local REPOSITORY="$1"
 	if ! [[ "$REPOSITORY" = *"://"* ]]; then
 		log "warning: mirror protocol not specified, assuming http://"
@@ -161,10 +160,9 @@ write_mirrors() {
 	fi
 	mkdir -p "${ROOTDIR}/etc/xbps.d"
 	cp --no-preserve=mode,ownership --backup=simple --suffix=.old \
-		"${ROOTDIR}/usr/share/xbps.d"/*-repository-*.conf "${ROOTDIR}/etc/xbps.d/"
-	sed -i "s|https://repo-default.voidlinux.org|${REPOSITORY%/}|g" "${ROOTDIR}/etc/xbps.d"/*-repository-*.conf
+		"${ROOTDIR}/usr/share/xbps.d"/*-repository-*.conf "${ROOTDIR}/etc/xbps.d/" &&
+	sed -i "s|https://repo-default.voidlinux.org|${REPOSITORY%/}|g" "${ROOTDIR}/etc/xbps.d"/*-repository-*.conf &&
 	$XBPS_INSTALL -S -r "${ROOTDIR}"
-	set +e
 }
 
 reset_mirrors_int() {
