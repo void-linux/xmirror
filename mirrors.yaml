@@ -26,7 +26,7 @@
 - base_url: https://voidmirror.fr.nuka.works/
   region: FR
   location: Poitiers, Nouvelle Aquitaine
-  tier: 1
+  tier: 2
   enabled: true
 - base_url: https://mirror.ps.kz/voidlinux/
   region: AS
