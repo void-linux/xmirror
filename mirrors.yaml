@@ -168,3 +168,8 @@
   location: Pimenta Bueno, Brazil
   tier: 2
   enabled: true
+- base_url: https://mirrors.kubarcloud.net/voidlinux
+  region: AS
+  location: Tehran, Iran
+  tier: 2
+  enabled: true
