@@ -125,7 +125,7 @@
   enabled: true
 - base_url: https://mirror.vofr.net/voidlinux/
   region: NA
-  location: California, USA
+  location: Virginia, USA
   tier: 2
   enabled: true
 - base_url: https://mirror2.sandyriver.net/pub/voidlinux/
