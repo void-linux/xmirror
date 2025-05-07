@@ -1,4 +1,4 @@
-VERSION   ?= 0.3
+VERSION   ?= 0.4.1
 DESTDIR   ?=
 PREFIX    ?= /usr/local
 MIRRORURL ?= https://xmirror.voidlinux.org/raw/mirrors.lst
@@ -6,7 +6,7 @@ PYTHON    ?= python3
 
 .PHONY: all completions install clean deploy
 
-all: xmirror completions
+all: xmirror completions deploy
 
 xmirror: xmirror.in
 	sed -e "s/@@VERSION@@/$(VERSION)/g; s,@@MIRRORURL@@,$(MIRRORURL),g" $< >$@+
@@ -20,10 +20,10 @@ completions/%: completions/%.in
 
 install: all
 	install -Dm 755 xmirror -t $(DESTDIR)$(PREFIX)/bin
-	install -Dm 644 mirrors.lst -t $(DESTDIR)$(PREFIX)/share/xmirror
+	install -Dm 644 _site/raw/mirrors.lst -t $(DESTDIR)$(PREFIX)/share/xmirror
 	install -Dm 644 completions/_xmirror -t $(DESTDIR)$(PREFIX)/share/zsh/site-functions
-	install -Dm 644 completions/xmirror.fish -t $(DESTDIR)/$(PREFIX)/share/fish/vendor_completions.d
-	install -Dm 644 completions/xmirror.bash -t $(DESTDIR)/usr/share/bash-completion/completions
+	install -Dm 644 completions/xmirror.fish -t $(DESTDIR)$(PREFIX)/share/fish/vendor_completions.d
+	install -Dm 644 completions/xmirror.bash -t $(DESTDIR)$(PREFIX)/share/bash-completion/completions
 	install -Dm 644 xmirror.1 -t $(DESTDIR)$(PREFIX)/share/man/man1
 
 clean:
