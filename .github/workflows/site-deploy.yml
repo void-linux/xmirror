@@ -25,13 +25,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: classabbyamp/treeless-checkout-action@v1
+        uses: actions/checkout@v4
       - name: Prepare
         run: python3 -m venv env && env/bin/pip install PyYAML
       - name: Create file structure
         run: PYTHON=env/bin/python make deploy
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v1
+        uses: actions/upload-pages-artifact@v3
   deploy:
     name: Deploy
     runs-on: ubuntu-latest
@@ -46,4 +46,4 @@ jobs:
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v1
+        uses: actions/deploy-pages@v4
