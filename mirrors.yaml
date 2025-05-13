@@ -68,6 +68,11 @@
   location: Singapore
   tier: 2
   enabled: true
+- base_url: https://mirror.kyoku.dev/void/
+  region: AS
+  location: Seoul, South Korea
+  tier: 2
+  enabled: true
 - base_url: http://ftp.dk.xemacs.org/voidlinux/
   region: EU
   location: Denmark
