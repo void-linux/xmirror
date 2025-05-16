@@ -58,6 +58,11 @@
   location: Shanghai, China
   tier: 2
   enabled: true
+- base_url: https://mirrors.kubarcloud.net/voidlinux
+  region: AS
+  location: Tehran, Iran
+  tier: 2
+  enabled: true
 - base_url: https://repo.jing.rocks/voidlinux/
   region: AS
   location: Tokyo, Japan
@@ -166,10 +171,5 @@
 - base_url: http://void.chililinux.com/voidlinux/
   region: SA
   location: Pimenta Bueno, Brazil
-  tier: 2
-  enabled: true
-- base_url: https://mirrors.kubarcloud.net/voidlinux
-  region: AS
-  location: Tehran, Iran
   tier: 2
   enabled: true
