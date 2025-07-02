@@ -47,7 +47,7 @@
   region: AS
   location: Beijing, China
   tier: 2
-  enabled: true
+  enabled: false
 - base_url: https://mirrors.tuna.tsinghua.edu.cn/voidlinux/
   region: AS
   location: Beijing, China
@@ -72,12 +72,12 @@
   region: AS
   location: Singapore
   tier: 2
-  enabled: true
+  enabled: false
 - base_url: https://mirror.kyoku.dev/void/
   region: AS
   location: Seoul, South Korea
   tier: 2
-  enabled: true
+  enabled: false
 - base_url: http://ftp.dk.xemacs.org/voidlinux/
   region: EU
   location: Denmark
@@ -138,11 +138,6 @@
   location: Virginia, USA
   tier: 2
   enabled: true
-- base_url: https://mirror2.sandyriver.net/pub/voidlinux/
-  region: NA
-  location: Kentucky, USA
-  tier: 2
-  enabled: true
 - base_url: https://mirror.clarkson.edu/voidlinux/
   region: NA
   location: New York, USA
@@ -152,7 +147,7 @@
   region: NA
   location: Montreal, Canada
   tier: 2
-  enabled: true
+  enabled: false
 - base_url: https://mirror.aarnet.edu.au/pub/voidlinux/
   region: OC
   location: Canberra, Australia
@@ -161,11 +156,6 @@
 - base_url: https://ftp.swin.edu.au/voidlinux/
   region: OC
   location: Melbourne, Australia
-  tier: 2
-  enabled: true
-- base_url: https://voidlinux.com.br/repo/
-  region: SA
-  location: Ouro Preto, Brazil
   tier: 2
   enabled: true
 - base_url: http://void.chililinux.com/voidlinux/
