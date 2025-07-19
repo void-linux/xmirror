@@ -163,3 +163,8 @@
   location: Pimenta Bueno, Brazil
   tier: 2
   enabled: true
+- base_url: https://mirror.meowsmp.net/voidlinux/
+  region: VN
+  location: Hanoi, Vietnam
+  tier: 2
+  enabled: true
