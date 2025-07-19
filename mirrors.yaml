@@ -78,6 +78,11 @@
   location: Seoul, South Korea
   tier: 2
   enabled: false
+- base_url: https://mirror.meowsmp.net/voidlinux/
+  region: AS
+  location: Hanoi, Vietnam
+  tier: 2
+  enabled: true
 - base_url: http://ftp.dk.xemacs.org/voidlinux/
   region: EU
   location: Denmark
@@ -161,10 +166,5 @@
 - base_url: http://void.chililinux.com/voidlinux/
   region: SA
   location: Pimenta Bueno, Brazil
-  tier: 2
-  enabled: true
-- base_url: https://mirror.meowsmp.net/voidlinux/
-  region: VN
-  location: Hanoi, Vietnam
   tier: 2
   enabled: true
