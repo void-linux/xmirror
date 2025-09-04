@@ -1,248 +1,450 @@
 #!/bin/bash
+#
+# Author:  classabbyamp     <void@placeviolette.net>
+#          Fernando Souza - https://github.com/tuxslack
+#
+# Description: Interactive script for changing XBPS mirrors.
+# Version: 0.4.2
+# License: BSD-2-Clause
+
+
+# ----------------------------------------------------------------------------------------
+
+# Internacionalização com gettext
+
+export TEXTDOMAIN=xmirror
+export TEXTDOMAINDIR=/usr/share/locale
+
+
+# 🌍 Gerar arquivo .pot (modelo de tradução)
+
+# Depois que todas as strings estiverem com gettext, use o comando:
+
+# xgettext -L Shell -o xmirror.pot xmirror.in
+
+# Isso gera um arquivo .pot que pode ser usado para traduzir.
+
+
+# Criar a tradução pt_BR xmirror.po
+
+# Com base no .pot gerado:
+
+# msginit --locale=pt_BR --input=xmirror.pot --output=xmirror.po --no-translator --no-wrap
+
+
+# sed -i '/^"Project-Id-Version:/c\"Project-Id-Version: xmirror 0.4.2\\n"' xmirror.po
+# sed -i '/^"Report-Msgid-Bugs-To:/c\"Report-Msgid-Bugs-To: \\n"' xmirror.po
+# sed -i '/^"POT-Creation-Date:/c\"POT-Creation-Date: 2025-09-04 16:29-0300\\n"' xmirror.po
+# sed -i '/^"PO-Revision-Date:/c\"PO-Revision-Date: 2025-09-04 16:29-0300\\n"' xmirror.po
+# sed -i '/^"Last-Translator:/c\"Last-Translator: Automatically generated\\n"' xmirror.po
+# sed -i '/^"Language-Team:/c\"Language-Team: none\\n"' xmirror.po
+# sed -i '/^"Language:/c\"Language: pt_BR\\n"' xmirror.po
+# sed -i '/^"Content-Type:/c\"Content-Type: text/plain; charset=UTF-8\\n"' xmirror.po
+# sed -i '/^"Plural-Forms:/c\"Plural-Forms: nplurals=2; plural=(n > 1);\\n"' xmirror.po
+
+
+# Para arquivos .po de traduções em português do Brasil, que usam acentuação e caracteres 
+# especiais (como ç, ã, é, etc.), ASCII não é suficiente.
+
+# Onde CHARSET deve ser UTF-8 para suportar caracteres acentuados e especiais.
+
+
+# Compilar e instalar a tradução
+
+# msgfmt pt_BR.po -o xmirror.mo
+
+
+# Depois copie para o local correto:
+
+# sudo mkdir -p /usr/share/locale/pt_BR/LC_MESSAGES
+
+# sudo cp xmirror.mo /usr/share/locale/pt_BR/LC_MESSAGES/xmirror.mo
+
+
+# Agora, se o sistema estiver com a locale em pt_BR.UTF-8, o script já exibirá as mensagens traduzidas!
+
+# ----------------------------------------------------------------------------------------
 
 usage() {
 	cat 1>&2 <<EOF
 xmirror [-dhnv] [-l mirrorlist] [-r rootdir] [-s mirrorurl]
 
-Interactive script for changing XBPS mirrors
+$(gettext "Interactive script for changing XBPS mirrors")
 
-    -d, --default       Reset the current mirror to the default, skipping the
-                        interactive TUI.
-    -h, --help          Show this help and exit.
-    -l, --mirror-list   Use an alternative mirror list file. This should be a
+    -d, --default       $(gettext "Reset the current mirror to the default, skipping the
+                        interactive TUI.")
+    -h, --help          $(gettext "Show this help and exit.")
+    -l, --mirror-list   $(gettext "Use an alternative mirror list file. This should be a
                         tab-separated value file with the columns: region, url,
-                        location, tier. Default: /usr/share/xmirror/mirrors.lst
-    -n, --no-fetch      Don't attempt to update the mirror list.
-    -r, --rootdir       Use an alternative rootdir. Acts like xbps's -r flag.
-    -s, --set           Set the current mirror to mirrorurl and exit, skipping
-                        the interactive TUI.
-    -v, --version       Show the version and exit.
+                        location, tier. Default: /usr/share/xmirror/mirrors.lst")
+    -n, --no-fetch      $(gettext "Don't attempt to update the mirror list.")
+    -r, --rootdir       $(gettext "Use an alternative rootdir. Acts like xbps's -r flag.")
+    -s, --set           $(gettext "Set the current mirror to mirrorurl and exit, skipping
+                        the interactive TUI.")
+    -v, --version       $(gettext "Show the version and exit.")
 
-Copyright (c) 2023 classabbyamp, released under the BSD-2-Clause license
+$(gettext "Copyright (c) 2023 classabbyamp, released under the BSD-2-Clause license")
+
 EOF
 	exit 1
 }
 
+# ----------------------------------------------------------------------------------------
+
 version() {
-	echo "xmirror v@@VERSION@@" 1>&2
+
+	echo "$(printf "$(gettext "xmirror v%s")"  "@@VERSION@@")" 1>&2
+
 	exit 0
 }
 
+# ----------------------------------------------------------------------------------------
+
 # dialog colors
+
 RED="\Z1"
 WHITE="\Z7"
 BOLD="\Zb"
 RESET="\Zn"
+
+# ----------------------------------------------------------------------------------------
+
 INITMSG=$(fold -sw 76 <<EOF
 
-For the best experience, choose a mirror geographically close to you, or use the Fastly Global CDN (listed in ${RED}World${RESET}). To use the default mirror (${RED}repo-default.voidlinux.org${RESET}), which can point to any Tier 1 mirror, Select ${BOLD}${RED}Default${RESET}.
+$(printf "$(gettext "For the best experience, choose a mirror geographically close to you, or use the Fastly Global CDN (listed in %sWorld%s). To use the default mirror (%srepo-default.voidlinux.org%s), which can point to any Tier 1 mirror, Select %s%sDefault%s.
 
-Tier 1 mirrors are maintained by the Void Linux Infrastructure Team and will always have the latest packages available. Tier 2 mirrors are not managed by Void and do not have any guarantees of freshness or completeness of packages, nor are they required to sync every available architecture or sub-repository.
+Tier 1 mirrors are maintained by the Void Linux Infrastructure Team and will always have the latest packages available. Tier 2 mirrors are not managed by Void and do not have any guarantees of freshness or completeness of packages, nor are they required to sync every available architecture or sub-repository.")"  "${RED}" "${RESET}" "${RED}" "${RESET}" "${BOLD}" "${RED}" "${RESET}")
+
 EOF
 )
+
+# INITMSG=$(printf "$(gettext "For the best experience, choose a mirror geographically close to you, or use the Fastly Global CDN (listed in %sWorld%s). To use the default mirror (%srepo-default.voidlinux.org%s), which can point to any Tier 1 mirror, Select %s%sDefault%s.\n\nTier 1 mirrors are maintained...")" "$RED" "$RESET" "$RED" "$RESET" "$BOLD" "$RED" "$RESET" | fold -sw 76)
+
+
+
 MENULABEL=$(fold -sw 74 <<EOF
-Use UP and DOWN keys to navigate menus. Use TAB to switch between buttons and ENTER to select.
+$(gettext "Use UP and DOWN keys to navigate menus. Use TAB to switch between buttons and ENTER to select.")
 EOF
 )
+
+# ----------------------------------------------------------------------------------------
 
 DIALOG() {
+
     rm -f "$ANSWER"
+
     dialog --colors --keep-tite --no-shadow --no-mouse \
-        --backtitle "${BOLD}${WHITE}Void Linux Mirror Selector -- https://www.voidlinux.org (v@@VERSION@@)${RESET}" \
-        --cancel-label "Back" --aspect 20 "$@" 2>"$ANSWER"
+        --backtitle "${BOLD}${WHITE}$(printf "$(gettext "Void Linux Mirror Selector -- https://www.voidlinux.org (v%s)")"  "@@VERSION@@")${RESET}" \
+        --cancel-label "$(gettext "Back")" --aspect 20 "$@" 2>"$ANSWER"
+
     return $?
 }
 
+# ----------------------------------------------------------------------------------------
+
 die() {
+
     rm -f "$ANSWER"
+
     exit "${1:-0}"
 }
+
+# ----------------------------------------------------------------------------------------
 
 log() {
 	echo xmirror: "$@" 1>&2
 }
 
+# ----------------------------------------------------------------------------------------
+
 check_required_programs() {
+
 	for cmd in find sed "$@"; do
+
 		if ! command -v "$cmd" >/dev/null 2>&1; then
-			log "could not find $cmd"
+
+			log "$(printf "$(gettext "could not find %s")"  "$cmd")"
+
 			exit 1
 		fi
+
 	done
+
 	XBPS_INSTALL="$(check_xbps_program install)"
+
 	XBPS_FETCH="$(check_xbps_program fetch)"
 }
 
+# ----------------------------------------------------------------------------------------
+
 check_xbps_program() {
+
 	local prog="$1"
+
 	if command -v "xbps-$prog" >/dev/null 2>&1; then
+
 		echo "xbps-$prog"
+
 	elif command -v "xbps-$prog.static" >/dev/null 2>&1; then
+
 		echo "xbps-$prog.static"
+
 	else
-		log "xmirror: could not find xbps-$prog or xbps-$prog.static"
+
+		log "$(printf "$(gettext "xmirror: could not find xbps-%s or xbps-%s.static")"  "$prog")"
+
 		exit 1
 	fi
 }
+
+# ----------------------------------------------------------------------------------------
 
 check_root() {
+
 	if [ "$(id -u)" != 0 ]; then
-		log "must be run as root"
+
+		log "$(gettext "must be run as root")"
+
 		exit 1
 	fi
 }
 
+# ----------------------------------------------------------------------------------------
+
 # uses names and abbreviations from https://planetarynames.wr.usgs.gov/Abbreviations
+
 region_name() {
+
 	case "$1" in
-		AF) echo "Africa" ;;
-		AN) echo "Antarctica" ;;
-		AS) echo "Asia" ;;
-		EU) echo "Europe" ;;
-		NA) echo "North America" ;;
-		OC) echo "Oceania" ;;
-		SA) echo "South and Central America" ;;
-		World) echo "Globally Available" ;;
+		AF) echo "$(gettext "Africa")" ;;
+		AN) echo "$(gettext "Antarctica")" ;;
+		AS) echo "$(gettext "Asia")" ;;
+		EU) echo "$(gettext "Europe")" ;;
+		NA) echo "$(gettext "North America")" ;;
+		OC) echo "$(gettext "Oceania")" ;;
+		SA) echo "$(gettext "South and Central America")" ;;
+		World) echo "$(gettext "Globally Available")" ;;
 		*) echo "$1" ;;
 	esac
+
 }
 
+# ----------------------------------------------------------------------------------------
+
 get_mirrors() {
+
 	if [ -z "$NOFETCH" ]; then
-		log "updating mirrorlist in ${ROOTDIR}/usr/share/xmirror"
+
+		log "$(printf "$(gettext "updating mirrorlist in %s/usr/share/xmirror")"  "${ROOTDIR}")"
+
 		if ! $XBPS_FETCH -o "$MIRRORLIST" "$MIRRORURL" &>/dev/null; then
-			log "unable to fetch new mirror list"
+
+			log "$(gettext "unable to fetch new mirror list")"
+
 		fi
 	fi
 
+
 	while read -r line; do
+
 		[[ "$line" = '#'* ]] && continue
+
 		while IFS=$'\t' read -r region rest; do
+
 			allmirrors["$region"]+="$rest"$'\n'
+
 		done <<< "$line"
+
 	done < "$MIRRORLIST"
 
 	for region in $(printf '%s\n' "${!allmirrors[@]}" | sort -u); do
+
 		regions+=( "$region" "$(region_name "$region")" )
+
 	done
 
-	regions+=( "Default" "Reset to the default mirror" )
-	regions+=( "Exit" "Exit this wizard" )
+	regions+=( "$(gettext "Default")" "$(gettext "Reset to the default mirror")" )
+
+	regions+=( "$(gettext "Exit")" "$(gettext "Exit this wizard")" )
 }
 
+# ----------------------------------------------------------------------------------------
+
 write_mirrors_int() {
+
 	local FILES REPOSITORY="$1"
+
 	FILES="$(find "${ROOTDIR}"/usr/share/xbps.d/ -name '*-repository-*.conf' | sort -u | sed 's|/usr/share|/etc|g')"
-	DIALOG --cr-wrap --yesno "${BOLD}The following operations will be executed:${RESET}\n\n
-The current mirror will be switched to: ${RED}${REPOSITORY}${RESET}
-The following files in ${BOLD}${ROOTDIR}/etc/xbps.d${RESET} will be created or overwritten, if they exist:
-${RED}${FILES// /$'\n'}${RESET}\n\n
-${BOLD}Do you want to continue?${RESET}" 20 80 || return
+
+	DIALOG --cr-wrap --yesno "$(printf "$(gettext "%sThe following operations will be executed:%s\n\n
+The current mirror will be switched to: %s%s%s
+The following files in %s%s/etc/xbps.d%s will be created or overwritten, if they exist:
+%s%s%s\n\n
+%sDo you want to continue?%s")"  "${BOLD}" "${RESET}" "${RED}" "${REPOSITORY}" "${RESET}" "${BOLD}" "${ROOTDIR}" "${RESET}" "${RED}" "${FILES// /$'\n'}" "${RESET}" "${BOLD}" "${RESET}")" 20 80 || return
 
 	{
 		if write_mirrors "$REPOSITORY"; then
-			printf "\nMirror successfully changed to %s!\n" "$REPOSITORY"
+
+			printf "\n$(gettext "Mirror successfully changed to %s!")\n" "$REPOSITORY"
+
 		else
+
 			for f in "${ROOTDIR}/etc/xbps.d"/*-repository-*.conf.old; do
+
 				mv "$f" "${f%.old}"
+
 			done
-			printf "\nMirror update failed! See log above for details.\n"
+
+			printf "\n$(gettext "Mirror update failed! See log above for details.")\n"
+
 		fi
-	} |& DIALOG --title " Updating mirror... " --programbox 16 80
+
+	} |& DIALOG --title " $(gettext "Updating mirror...") " --programbox 16 80
+
 	exit 0
 }
 
+# ----------------------------------------------------------------------------------------
+
 write_mirrors() {
+
 	local REPOSITORY="$1"
+
 	if ! [[ "$REPOSITORY" = *"://"* ]]; then
-		log "warning: mirror protocol not specified, assuming http://"
+
+		log "$(gettext "warning: mirror protocol not specified, assuming http://")"
+
 		REPOSITORY="http://$REPOSITORY"
 	fi
+
 	mkdir -p "${ROOTDIR}/etc/xbps.d"
+
 	cp --no-preserve=mode,ownership --backup=simple --suffix=.old \
 		"${ROOTDIR}/usr/share/xbps.d"/*-repository-*.conf "${ROOTDIR}/etc/xbps.d/" &&
 	sed -i "s|https://repo-default.voidlinux.org|${REPOSITORY%/}|g" "${ROOTDIR}/etc/xbps.d"/*-repository-*.conf &&
 	$XBPS_INSTALL -S -r "${ROOTDIR}"
+
 }
 
+# ----------------------------------------------------------------------------------------
+
 reset_mirrors_int() {
+
 	local FILES
+
 	FILES="$(find "${ROOTDIR}"/usr/share/xbps.d/ -name '*-repository-*.conf' | sort -u | sed 's|/usr/share|/etc|g')"
-	DIALOG --cr-wrap --yesno "${BOLD}The following operations will be executed:${RESET}\n\n
+
+	DIALOG --cr-wrap --yesno "$(printf "$(gettext "%sThe following operations will be executed:%s\n\n
 The current mirror will be reset to the default.
-The following files in ${BOLD}${ROOTDIR}/etc/xbps.d${RESET} will be removed, if they exist:
-${RED}${FILES// /$'\n'}${RESET}\n\n
-${BOLD}Do you want to continue?${RESET}" 20 80 || return
+The following files in %s%s/etc/xbps.d%s will be removed, if they exist:
+%s%s%s\n\n
+%sDo you want to continue?%s")"  "${BOLD}" "${RESET}" "${BOLD}" "${ROOTDIR}" "${RESET}" "${RED}" "${FILES// /$'\n'}" "${RESET}" "${BOLD}" "${RESET}")" 20 80 || return
 
 	{
 		if reset_mirrors "$FILES"; then
-			printf "\nMirror successfully reset!\n"
+
+			printf "\n$(gettext "Mirror successfully reset!")\n"
+
 		else
-			printf "\nMirror reset failed! See log above for details.\n"
+
+			printf "\n$(gettext "Mirror reset failed! See log above for details.")\n"
+
 		fi
-	} |& DIALOG --title " Resetting mirror to default... " --programbox 16 80
+
+	} |& DIALOG --title " $(gettext "Resetting mirror to default...") " --programbox 16 80
+
 	exit 0
 }
 
+# ----------------------------------------------------------------------------------------
+
 reset_mirrors() {
+
 	local FILES="$1"
+
 	set -e
+
 	# shellcheck disable=SC2086
 	rm -f $FILES
+
 	$XBPS_INSTALL -S -r "${ROOTDIR}"
+
 	set +e
 }
 
+# ----------------------------------------------------------------------------------------
+
 region_menu() {
+
 	local sel
-	DIALOG --title " Choose a Region " \
+
+	DIALOG --title " $(gettext "Choose a Region") " \
 		--menu "$MENULABEL" 10 78 0 \
 		"${regions[@]}"
 
 	sel="$(cat "$ANSWER")"
+
 	case $sel in
-		"Exit"|'') exit 0 ;;
-		"Default") reset_mirrors_int ;;
+		"$(gettext "Exit")"|'') exit 0 ;;
+		"$(gettext "Default")") reset_mirrors_int ;;
 		*) mirror_menu "$sel" ;;
 	esac
 }
 
+# ----------------------------------------------------------------------------------------
+
 mirror_menu() {
+
 	local sel region="$1"
 	unset mirrors
 	declare -a mirrors
 
 	while read -r line; do
+
 		[ -z "$line" ] && continue
+
 		while IFS=$'\t' read -r url location tier rest; do
-			mirrors+=( "$url" "$location (Tier $tier)" )
+
+			mirrors+=( "$url" "$location ($(gettext "Tier") $tier)" )
+
 		done <<< "$line"
+
 	done <<< "${allmirrors[$region]}"
 
 	while true; do
-		DIALOG --title " Choose a Mirror (Region: $(region_name "$region")) " \
+
+		DIALOG --title " $(printf " $(gettext "Choose a Mirror (Region: %s)") "  "$(region_name "$region")")" \
 			--menu "$MENULABEL" 10 78 0 \
 			"${mirrors[@]}"
 
 		sel="$(cat "$ANSWER")"
+
 		case $sel in
 			"") return ;;
 			*) write_mirrors_int "$sel" ;;
 		esac
+
 	done
 }
+
+# ----------------------------------------------------------------------------------------
 
 TEMP=$(getopt -o 'l:r:s:dnvh' --long 'mirror-list:,rootdir:,set:,default,no-fetch,version,help' -n xmirror -- "$@")
 
 # shellcheck disable=SC2181
+
 if [ $? -ne 0 ]; then
+
 	usage
+
 fi
 
 eval set -- "$TEMP"
+
 unset TEMP
 
 while true; do
+
 	case "$1" in
 		'-l'|'--mirror-list') MIRRORLIST="$2"; NOFETCH=1; shift 2 ;;
 		'-r'|'--rootdir')     ROOTDIR="$2";    shift 2 ;;
@@ -254,35 +456,59 @@ while true; do
 		''|'--')              break ;;
 		*)                    usage ;;
 	esac
+
 done
 
 check_root
 
 if [ -n "$SETMIRROR" ]; then
+
 	check_required_programs
+
 	SETMIRROR="${SETMIRROR%%/current*}"
-	log "updating mirror to $SETMIRROR..."
+
+	log "$(printf "$(gettext "updating mirror to %s...")"  "$SETMIRROR")"
+
 	if write_mirrors "$SETMIRROR"; then
-		log "mirror successfully updated to $SETMIRROR."
+
+		log "$(printf "$(gettext "mirror successfully updated to %s.")"  "$SETMIRROR")"
+
 		exit 0
+
 	else
+
 		for f in "${ROOTDIR}/etc/xbps.d"/*-repository-*.conf.old; do
+
 			mv "$f" "${f%.old}"
+
 		done
-		log "mirror update failed."
+
+		log "$(gettext "mirror update failed.")"
+
 		exit 1
+
 	fi
+
 fi
 
 if [ -n "$RESETMIRROR" ]; then
+
 	check_required_programs
-	log "xmirror: resetting mirror..."
+
+	log "$(gettext "xmirror: resetting mirror...")"
+
 	FILES="$(find "${ROOTDIR}"/usr/share/xbps.d/ -name '*-repository-*.conf' | sort -u | sed 's|/usr/share|/etc|g')"
+
 	if reset_mirrors "$FILES"; then
-		log "xmirror: mirror successfully reset."
+
+		log "$(gettext "xmirror: mirror successfully reset.")"
+
 		exit 0
+
 	else
-		log "xmirror: mirror reset failed."
+
+		log "$(gettext "xmirror: mirror reset failed.")"
+
 		exit 1
 	fi
 fi
@@ -295,15 +521,19 @@ declare -a regions
 
 check_required_programs dialog
 
-trap "die" INT TERM QUIT EXIT
+trap die INT TERM QUIT EXIT
 
 get_mirrors
 
 ANSWER=$(mktemp -t xmirror-XXXXXXXX) || exit 1
 
-DIALOG --title "${BOLD} Void Linux Mirror Selection Wizard ${RESET}" --msgbox "$INITMSG" 15 80
+DIALOG --title "${BOLD} $(gettext "Void Linux Mirror Selection Wizard") ${RESET}" --msgbox "$INITMSG" 15 80
 
 while true; do
+
 	region_menu
+
 done
+
 # vim: set ft=bash:
+
