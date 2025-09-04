@@ -51,7 +51,7 @@ export TEXTDOMAINDIR=/usr/share/locale
 
 # Compilar e instalar a tradução
 
-# msgfmt pt_BR.po -o xmirror.mo
+# msgfmt xmirror.po -o xmirror.mo
 
 
 # Depois copie para o local correto:
