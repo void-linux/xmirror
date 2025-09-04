@@ -1,0 +1,263 @@
+# Portuguese translations for PACKAGE package.
+# Copyright (C) 2025 THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# Automatically generated, 2025.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: xmirror 0.4.2\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-09-04 16:29-0300\n"
+"PO-Revision-Date: 2025-09-04 16:29-0300\n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: none\n"
+"Language: pt_BR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: xmirror.in:48
+msgid "Interactive script for changing XBPS mirrors"
+msgstr "Script interativo para alterar espelhos XBPS"
+
+#: xmirror.in:50
+msgid ""
+"Reset the current mirror to the default, skipping the\n"
+"                        interactive TUI."
+msgstr ""
+"Redefine o espelho atual para o padrão, ignorando a\n"
+"                        TUI interativa."
+
+#: xmirror.in:52
+msgid "Show this help and exit."
+msgstr "Mostrar esta ajuda e sair."
+
+#: xmirror.in:53
+msgid ""
+"Use an alternative mirror list file. This should be a\n"
+"                        tab-separated value file with the columns: region, url,\n"
+"                        location, tier. Default: /usr/share/xmirror/mirrors.lst"
+msgstr ""
+"Use um arquivo de lista de espelhos alternativo. Este deve ser um\n"
+"                        arquivo de valores separados por tabulação com as colunas: região, url,\n"
+"                        localização, nível. Padrão: /usr/share/xmirror/mirrors.lst"
+
+#: xmirror.in:56
+msgid "Don't attempt to update the mirror list."
+msgstr "Não tente atualizar a lista de espelhos."
+
+#: xmirror.in:57
+msgid "Use an alternative rootdir. Acts like xbps's -r flag."
+msgstr "Use um diretório raiz alternativo. Atua como a flag -r do xbps."
+
+#: xmirror.in:58
+msgid ""
+"Set the current mirror to mirrorurl and exit, skipping\n"
+"                        the interactive TUI."
+msgstr ""
+"Defina o espelho atual como mirrorurl e saia, pulando\n"
+"                        a interface gráfica interativa."
+
+#: xmirror.in:60
+msgid "Show the version and exit."
+msgstr "Mostre a versão e saia."
+
+#: xmirror.in:62
+msgid "Copyright (c) 2023 classabbyamp, released under the BSD-2-Clause license"
+msgstr "Copyright (c) 2023 classabbyamp, lançado sob a licença BSD-2-Clause"
+
+#: xmirror.in:72
+msgid "xmirror v%s"
+msgstr "xmirror v%s"
+
+#: xmirror.in:90
+msgid ""
+"For the best experience, choose a mirror geographically close to you, or use the Fastly Global CDN (listed in %sWorld%s). To use the default mirror (%srepo-default.voidlinux.org%s), which can point to any Tier 1 mirror, Select %s%sDefault%s.\n"
+"\n"
+"Tier 1 mirrors are maintained by the Void Linux Infrastructure Team and will always have the latest packages available. Tier 2 mirrors are not managed by Void and do not have any guarantees of freshness or completeness of packages, nor are they required to sync every available architecture or sub-repository."
+
+msgstr ""
+"Para a melhor experiência, escolha um espelho geograficamente próximo a você ou use o Fastly Global CDN (listado em %sWorld%s). Para usar o espelho padrão (%srepo-default.voidlinux.org%s), que pode apontar para qualquer espelho de Nível 1, selecione %s%sDefault%s.\n"
+"\n"
+"Os espelhos de Nível 1 são mantidos pela Equipe de Infraestrutura do Void Linux e sempre terão os pacotes mais recentes disponíveis. Os espelhos de Nível 2 não são gerenciados pelo Void e não oferecem nenhuma garantia de atualização ou integridade dos pacotes, nem são obrigados a sincronizar todas as arquiteturas ou sub-repositórios disponíveis."
+
+
+#: xmirror.in:102
+msgid "Use UP and DOWN keys to navigate menus. Use TAB to switch between buttons and ENTER to select."
+msgstr "Use as teclas PARA CIMA e PARA BAIXO para navegar pelos menus. Use TAB para alternar entre os botões e ENTER para selecionar."
+
+#: xmirror.in:113
+msgid "Void Linux Mirror Selector -- https://www.voidlinux.org (v%s)"
+msgstr "Seletor de espelho do Void Linux -- https://www.voidlinux.org (v%s)"
+
+#: xmirror.in:114
+msgid "Back"
+msgstr "Voltar"
+
+#: xmirror.in:142
+msgid "could not find %s"
+msgstr "não foi possível encontrar %s"
+
+#: xmirror.in:170
+msgid "xmirror: could not find xbps-%s or xbps-%s.static"
+msgstr "xmirror: não foi possível encontrar xbps-%s ou xbps-%s.static"
+
+#: xmirror.in:182
+msgid "must be run as root"
+msgstr "deve ser executado como root"
+
+#: xmirror.in:195
+msgid "Africa"
+msgstr "África"
+
+#: xmirror.in:196
+msgid "Antarctica"
+msgstr "Antártica"
+
+#: xmirror.in:197
+msgid "Asia"
+msgstr "Ásia"
+
+#: xmirror.in:198
+msgid "Europe"
+msgstr "Europa"
+
+#: xmirror.in:199
+msgid "North America"
+msgstr "América do Norte"
+
+#: xmirror.in:200
+msgid "Oceania"
+msgstr "Oceania"
+
+#: xmirror.in:201
+msgid "South and Central America"
+msgstr "América do Sul e Central"
+
+#: xmirror.in:202
+msgid "Globally Available"
+msgstr "Disponível globalmente"
+
+#: xmirror.in:214
+msgid "updating mirrorlist in %s/usr/share/xmirror"
+msgstr "Atualizando a lista de espelhos em %s/usr/share/xmirror"
+
+#: xmirror.in:218
+msgid "unable to fetch new mirror list"
+msgstr "não foi possível buscar a nova lista de espelhos"
+
+#: xmirror.in:242 xmirror.in:365
+msgid "Default"
+msgstr "Padrão"
+
+#: xmirror.in:242
+msgid "Reset to the default mirror"
+msgstr "Redefinir para o espelho padrão"
+
+#: xmirror.in:244 xmirror.in:364
+msgid "Exit"
+msgstr "Sair"
+
+#: xmirror.in:244
+msgid "Exit this wizard"
+msgstr "Sair deste assistente"
+
+#: xmirror.in:255
+msgid ""
+"%sThe following operations will be executed:%s\\n\\n\n"
+"The current mirror will be switched to: %s%s%s\n"
+"The following files in %s%s/etc/xbps.d%s will be created or overwritten, if they exist:\n"
+"%s%s%s\\n\\n\n"
+"%sDo you want to continue?%s"
+
+msgstr ""
+"%sAs seguintes operações serão executadas:%s\\n\\n\n"
+"O atual O espelho será alterado para: %s%s%s\n"
+"Os seguintes arquivos em %s%s/etc/xbps.d%s serão criados ou sobrescritos, se existirem:\n"
+"%s%s%s\\n\\n\n"
+"%sDeseja continuar?%s"
+
+#: xmirror.in:264
+msgid "Mirror successfully changed to %s!"
+msgstr "Espelho alterado com sucesso para %s!"
+
+#: xmirror.in:274
+msgid "Mirror update failed! See log above for details."
+msgstr "Falha na atualização do espelho! Consulte o log acima para obter detalhes."
+
+#: xmirror.in:278
+msgid "Updating mirror..."
+msgstr "Atualizando o espelho..."
+
+#: xmirror.in:291
+msgid "warning: mirror protocol not specified, assuming http://"
+msgstr "aviso: protocolo de espelho não especificado, assumindo http://"
+
+#: xmirror.in:313
+msgid ""
+"%sThe following operations will be executed:%s\\n\\n\n"
+"The current mirror will be reset to the default.\n"
+"The following files in %s%s/etc/xbps.d%s will be removed, if they exist:\n"
+"%s%s%s\\n\\n\n"
+"%sDo you want to continue?%s"
+
+msgstr ""
+"%sAs seguintes operações serão executadas:%s\\n\\n\n"
+"O espelho atual será redefinido para o padrão.\n"
+"Os seguintes arquivos em %s%s/etc/xbps.d%s serão removidos, se existirem:\n"
+"%s%s%s\\n\\n\n"
+"%sDeseja continuar?%s"
+
+#: xmirror.in:322
+msgid "Mirror successfully reset!"
+msgstr "Espelho redefinido com sucesso!"
+
+#: xmirror.in:326
+msgid "Mirror reset failed! See log above for details."
+msgstr "Falha na redefinição do espelho! Veja o log acima para mais detalhes."
+
+#: xmirror.in:330
+msgid "Resetting mirror to default..."
+msgstr "Redefinindo o espelho para o padrão..."
+
+#: xmirror.in:357
+msgid "Choose a Region"
+msgstr "Escolha uma região"
+
+#: xmirror.in:384
+msgid "Tier"
+msgstr "Nível"
+
+#: xmirror.in:392
+msgid "Choose a Mirror (Region: %s)"
+msgstr "Escolha um espelho (região: %s)"
+
+#: xmirror.in:446
+msgid "updating mirror to %s..."
+msgstr "atualizando o espelho para %s..."
+
+#: xmirror.in:450
+msgid "mirror successfully updated to %s."
+msgstr "espelho atualizado com sucesso para %s."
+
+#: xmirror.in:462
+msgid "mirror update failed."
+msgstr "falha na atualização do espelho."
+
+#: xmirror.in:474
+msgid "xmirror: resetting mirror..."
+msgstr "xmirror: redefinindo o espelho..."
+
+#: xmirror.in:480
+msgid "xmirror: mirror successfully reset."
+msgstr "xmirror: espelho redefinido com sucesso."
+
+#: xmirror.in:486
+msgid "xmirror: mirror reset failed."
+msgstr "xmirror: falha na redefinição do espelho."
+
+#: xmirror.in:506
+msgid "Void Linux Mirror Selection Wizard"
+msgstr "Assistente de seleção de espelho do Void Linux"
+
