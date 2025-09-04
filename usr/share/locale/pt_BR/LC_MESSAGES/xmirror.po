@@ -261,3 +261,12 @@ msgstr "xmirror: falha na redefinição do espelho."
 msgid "Void Linux Mirror Selection Wizard"
 msgstr "Assistente de seleção de espelho do Void Linux"
 
+
+msgid "Yes"
+msgstr "Sim"
+
+msgid "No"
+msgstr "Não"
+
+
+

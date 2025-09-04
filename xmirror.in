@@ -276,7 +276,7 @@ write_mirrors_int() {
 
 	FILES="$(find "${ROOTDIR}"/usr/share/xbps.d/ -name '*-repository-*.conf' | sort -u | sed 's|/usr/share|/etc|g')"
 
-	DIALOG --cr-wrap --yesno "$(printf "$(gettext "%sThe following operations will be executed:%s\n\n
+	DIALOG --cr-wrap --yes-label "$(gettext "Yes")" --no-label "$(gettext "No")" --yesno "$(printf "$(gettext "%sThe following operations will be executed:%s\n\n
 The current mirror will be switched to: %s%s%s
 The following files in %s%s/etc/xbps.d%s will be created or overwritten, if they exist:
 %s%s%s\n\n
@@ -334,7 +334,7 @@ reset_mirrors_int() {
 
 	FILES="$(find "${ROOTDIR}"/usr/share/xbps.d/ -name '*-repository-*.conf' | sort -u | sed 's|/usr/share|/etc|g')"
 
-	DIALOG --cr-wrap --yesno "$(printf "$(gettext "%sThe following operations will be executed:%s\n\n
+	DIALOG --cr-wrap --yes-label "$(gettext "Yes")" --no-label "$(gettext "No")" --yesno "$(printf "$(gettext "%sThe following operations will be executed:%s\n\n
 The current mirror will be reset to the default.
 The following files in %s%s/etc/xbps.d%s will be removed, if they exist:
 %s%s%s\n\n

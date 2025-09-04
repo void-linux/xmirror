@@ -250,3 +250,11 @@ msgstr ""
 msgid "Void Linux Mirror Selection Wizard"
 msgstr ""
 
+
+msgid "Yes"
+msgstr ""
+
+msgid "No"
+msgstr ""
+
+
