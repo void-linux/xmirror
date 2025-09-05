@@ -1,6 +1,6 @@
-# Portuguese translations for PACKAGE package.
+# Portuguese translations for xmirror package.
 # Copyright (C) 2025 THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
+# This file is distributed under the same license as the xmirror package.
 # Automatically generated, 2025.
 #
 msgid ""
@@ -10,7 +10,7 @@ msgstr ""
 "POT-Creation-Date: 2025-09-04 16:29-0300\n"
 "PO-Revision-Date: 2025-09-04 16:29-0300\n"
 "Last-Translator: Fernando Souza\n"
-"Language-Team: none\n"
+"Language-Team: Portuguese <pt_BR@li.org>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -173,10 +173,11 @@ msgid ""
 
 msgstr ""
 "%sAs seguintes operações serão executadas:%s\\n\\n\n"
-"O atual O espelho será alterado para: %s%s%s\n"
-"Os seguintes arquivos em %s%s/etc/xbps.d%s serão criados ou sobrescritos, se existirem:\n"
+"O espelho atual será alternado para: %s%s%s\n"
+"Os seguintes arquivos em %s%s/etc/xbps.d%s serão criados ou substituídos, se existirem:\n"
 "%s%s%s\\n\\n\n"
 "%sDeseja continuar?%s"
+
 
 #: xmirror.in:264
 msgid "Mirror successfully changed to %s!"
