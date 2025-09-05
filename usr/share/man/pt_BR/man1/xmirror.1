@@ -1,0 +1,97 @@
+\"Tradução feita por Fernando Souza <https://github.com/tuxslack> - Setembro 2025
+\"Baseada na versão original de xmirror.1
+\"Repositório: https://github.com/void-linux/xmirror
+\"=======================================================================================
+.Dd 30 de janeiro de 2023
+.Dt XMIRROR 1
+.Os
+.Sh NOME
+.Nm xmirror
+.Nd Script interativo para alterar espelhos XBPS
+.Sh SINOPSE
+.Nm xmirror
+.Op OPÇÕES...
+.Sh DESCRIÇÃO
+O utilitário 
+.Nm 
+configura e redefine o servidor espelho utilizado pelo XBPS. Ele 
+pode ser usado com e sem a interface gráfica interativa (TUI). O 
+.Nm 
+requer permissões de root para ser executado.
+.Sh OPÇÕES
+.Ss Comum
+.Bl -tag -width -x
+.It Fl h , Fl -help
+Mostrar ajuda e sair.
+.It Fl r , Fl -rootdir Ar rootdir
+Use um diretório raiz alternativo
+.Ar rootdir .
+Funciona de forma semelhante à opção
+.Fl r
+do XBPS.
+.It Fl v , Fl -version
+Mostrar a versão e sair.
+.El
+.Ss Interativo
+Estas opções só funcionam ao utilizar a interface interativa de navegação (TUI).
+.Bl -tag -width -x
+.It Fl l , Fl -mirror-list Ar mirrorlist
+Use um arquivo
+.Ar mirrorlist
+alternativo. Este deve estar no formato descrito em 
+.Sx ARQUIVOS .
+Padrão:
+.Pa /usr/share/xmirror/mirrors.lst
+.It Fl n , Fl -no-fetch
+Não tente atualizar a lista de espelhos.
+.El
+.Ss Não interativo
+Usar essas opções ignora o TUI interativo.
+.Bl -tag -width -x
+.It Fl d , Fl -default
+Redefina o espelho atual para o padrão e saia.
+.It Fl s , Fl -set Ar mirrorurl
+Defina o espelho atual como
+.Ar mirrorurl
+e saia.
+.El
+.Sh AMBIENTE
+O
+.Nm
+respeita todas as variáveis ​​de ambiente que o
+.Xr xbps-install 1
+usa ao sincronizar índices de repositório após selecionar ou redefinir espelhos.
+.Pp
+.Sy XBPS_ARCH
+é particularmente útil ao definir o espelho em um sistema de 
+arquitetura diferente.
+.Sh ARQUIVOS
+.Ar /usr/share/xmirror/mirrors.lst
+é onde a lista de espelhos atual é armazenada. É um arquivo de valores separados por tabulação,
+com as colunas:
+.Bl -tag -width location
+.It Sy região
+Uma abreviação de continente de
+.Lk https://planetarynames.wr.usgs.gov/Abbreviations ,
+.Em World ,
+ou outra string que descreva a região do espelho.
+.It Sy url
+A URL base do espelho, por exemplo:
+.Lk https://repo-default.voidlinux.org/
+.It Sy localização
+Um local legível para o espelho, como um país e/ou cidade.
+.It Sy nível
+Um indicador de status.
+.El
+.Pp
+Todas as linhas que começam com
+.Em #
+são ignoradas.
+.Sh VEJA TAMBÉM
+.Xr xbps-install 1 ,
+.Lk https://docs.voidlinux.org/xbps/repositories/mirrors/changing.html
+.Sh AUTOR
+.An classabbyamp Aq Mt void@placeviolette.net
+.Sh BUGS
+Relatar bugs em
+.Lk https://github.com/void-linux/xmirror/issues
