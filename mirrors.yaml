@@ -23,7 +23,7 @@
   location: Chicago, USA
   tier: 1
   enabled: true
-- base_url: https://mirrors.cicku.me/voidlinux
+- base_url: https://mirrors.cicku.me/voidlinux/
   region: World
   location: Cloudflare Global CDN
   tier: 2
