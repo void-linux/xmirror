@@ -143,6 +143,12 @@ if __name__ == "__main__":
 	# load data
 	with srcfile.open() as f:
 		data = yaml.safe_load(f.read())
+	
+	# Make sure all repo url's end with trailing '/'
+	for record in data:
+		if not record["base_url"].endswith("/"):
+			print(f"{argv[0]}: {record['base_url']} does not has a trailing / ", file=stderr)
+			raise SystemExit(1)
 
 	# write v0 api json
 	write_api(destdir, data)
