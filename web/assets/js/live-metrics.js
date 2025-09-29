@@ -32,7 +32,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 	const mirrorAge = Object.fromEntries(
 		data["data"]["result"].map((val) => {
-			const url = val["metric"]["instance"].replace(/current$/, "");
+			const url = val["metric"]["instance"].replace(/\/current$/, "");
 			const age = parseFloat(val["value"][1]);
 			return [url, age];
 		})
@@ -50,7 +50,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 		const url = row
 			.querySelector("a")
 			.getAttribute("href")
-			.replace(/https?:\/\//, "");
+			.replace(/https?:\/\//, "")
+			.replace(/\/$/, "");
 		const { className, innerText } = parseAge(mirrorAge[url]);
 
 		const cell = document.createElement("td");
