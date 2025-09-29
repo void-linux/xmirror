@@ -168,3 +168,8 @@
   location: Pimenta Bueno, Brazil
   tier: 2
   enabled: true
+- base_url: https://mirrors.ic.unicamp.br/voidlinux
+  region: SA
+  location: Campinas, Brazil
+  tier: 2
+  enabled: true
