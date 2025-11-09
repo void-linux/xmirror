@@ -168,3 +168,9 @@
   location: Pimenta Bueno, Brazil
   tier: 2
   enabled: true
+- base_url: https://mirror.linux.ec/voidlinux/
+  region: SA
+  location: Quito, Ecuador
+  tier: 2
+  enabled: true
+  
