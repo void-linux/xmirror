@@ -173,3 +173,8 @@
   location: Quito, Ecuador
   tier: 2
   enabled: true
+- base_url: https://mirror.freedif.org/voidlinux/
+  region: AS
+  location: Singapore
+  tier: 2
+  enabled: true
