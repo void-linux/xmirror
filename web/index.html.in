@@ -55,7 +55,7 @@
 
 	<p>
 		The status of all listed mirrors can be viewed on Void's
-		<a href="https://grafana.voidlinux.org/d/cLraC-XMk/mirrors-status">Grafana dashboard</a>.
+		<a href="https://grafana.voidlinux.org/d/a5abf4c2-1bea-49e5-8425-22c6ceddc2ec/mirror-status">Grafana dashboard</a>.
 	</p>
 
 	<h3 id="tier1">Tier 1 mirrors</h2>
