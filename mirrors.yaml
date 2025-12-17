@@ -148,6 +148,11 @@
   location: New York, USA
   tier: 2
   enabled: true
+- base_url: https://mirrors.lug.mtu.edu/voidlinux/
+  region: NA
+  location: Michigan, USA
+  tier: 2
+  enabled: true
 - base_url: https://mirror.0xem.ma/voidlinux/
   region: NA
   location: Montreal, Canada
