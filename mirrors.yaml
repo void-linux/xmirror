@@ -150,7 +150,7 @@
   enabled: true
 - base_url: https://mirrors.lug.mtu.edu/voidlinux/
   region: NA
-  location: Houghton, USA
+  location: Michigan, USA
   tier: 2
   enabled: true
 - base_url: https://mirror.0xem.ma/voidlinux/
