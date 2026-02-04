@@ -58,6 +58,11 @@
   location: Shanghai, China
   tier: 2
   enabled: true
+- base_url: https://mirror.mmdbalkhi.ir/void/
+  region: AS
+  location: Tehran, Iran
+  tier: 2
+  enabled: true
 - base_url: https://mirrors.kubarcloud.net/voidlinux/
   region: AS
   location: Tehran, Iran
