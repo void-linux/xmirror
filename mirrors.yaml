@@ -183,6 +183,11 @@
   location: Pimenta Bueno, Brazil
   tier: 2
   enabled: true
+- base_url: https://void.voidbr.org/voidlinux/
+  region: SA
+  location: Mirante do Paranapanema/SP, Brazil
+  tier: 2
+  enabled: true
 - base_url: https://mirror.linux.ec/voidlinux/
   region: SA
   location: Quito, Ecuador
