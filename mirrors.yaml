@@ -168,6 +168,11 @@
   location: Montreal, Canada
   tier: 2
   enabled: false
+- base_url: https://mirror.allthingslinux.org/voidlinux/
+  region: NA
+  location: Beauharnois, Canada
+  tier: 2
+  enabled: true
 - base_url: https://mirror.aarnet.edu.au/pub/voidlinux/
   region: OC
   location: Canberra, Australia
