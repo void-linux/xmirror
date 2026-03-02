@@ -188,3 +188,8 @@
   location: Singapore
   tier: 2
   enabled: true
+- base_url: http://void.voidlinux.com.br/voidlinux/
+  region: SA
+  location: Cacoal, Brazil
+  tier: 2
+  enabled: true
