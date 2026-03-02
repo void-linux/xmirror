@@ -193,6 +193,11 @@
   location: Mirante do Paranapanema/SP, Brazil
   tier: 2
   enabled: true
+- base_url: http://void.voidlinux.com.br/voidlinux/
+  region: SA
+  location: Cacoal, Brazil
+  tier: 2
+  enabled: true
 - base_url: https://mirror.linux.ec/voidlinux/
   region: SA
   location: Quito, Ecuador
