@@ -32,7 +32,7 @@
   region: AS
   location: Almaty, Kazakhstan
   tier: 2
-  enabled: true
+  enabled: false
 - base_url: https://mirror.nju.edu.cn/voidlinux/
   region: AS
   location: China
@@ -57,7 +57,7 @@
   region: AS
   location: Shanghai, China
   tier: 2
-  enabled: true
+  enabled: false
 - base_url: https://mirror.mmdbalkhi.ir/void/
   region: AS
   location: Tehran, Iran
@@ -117,7 +117,7 @@
   region: EU
   location: Amsterdam, Netherlands
   tier: 2
-  enabled: true
+  enabled: false
 - base_url: https://void.sakamoto.pl/
   region: EU
   location: Warsaw, Poland
@@ -157,7 +157,7 @@
   region: NA
   location: New York, USA
   tier: 2
-  enabled: true
+  enabled: false
 - base_url: https://mirrors.lug.mtu.edu/voidlinux/
   region: NA
   location: Michigan, USA
@@ -182,18 +182,13 @@
   region: OC
   location: Melbourne, Australia
   tier: 2
-  enabled: true
-- base_url: http://void.chililinux.com/voidlinux/
-  region: SA
-  location: Pimenta Bueno, Brazil
-  tier: 2
-  enabled: true
+  enabled: false
 - base_url: https://void.voidbr.org/voidlinux/
   region: SA
   location: Mirante do Paranapanema/SP, Brazil
   tier: 2
   enabled: true
-- base_url: http://void.voidlinux.com.br/voidlinux/
+- base_url: https://void.voidlinux.com.br/voidlinux/
   region: SA
   location: Cacoal, Brazil
   tier: 2
