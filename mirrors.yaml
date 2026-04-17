@@ -88,6 +88,11 @@
   location: Seoul, South Korea
   tier: 2
   enabled: false
+- base_url: https://mirror.heigou.pe.kr/voidlinux/
+  region: AS
+  location: South Korea
+  tier: 2
+  enabled: true
 - base_url: https://mirror.meowsmp.net/voidlinux/
   region: AS
   location: Hanoi, Vietnam
