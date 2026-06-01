@@ -133,6 +133,11 @@
   location: Russia
   tier: 2
   enabled: true
+- base_url: http://mirror.mephi.ru/voidlinux/
+  region: EU
+  location: Russia
+  tier: 2
+  enabled: true
 - base_url: https://mirror.yandex.ru/mirrors/voidlinux/
   region: EU
   location: Russia
