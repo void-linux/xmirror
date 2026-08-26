@@ -198,3 +198,8 @@
   location: Quito, Ecuador
   tier: 2
   enabled: true
+- base_url: https://void.tuxmirrors.xyz/
+  region: NA
+  location: Montreal, Canada
+  tier: 2
+  enabled: true
