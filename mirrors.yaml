@@ -98,6 +98,11 @@
   location: Hanoi, Vietnam
   tier: 2
   enabled: true
+- base_url: https://voidlinux.mirror-services.net/voidlinux/
+  region: EU
+  location: Belgium
+  tier: 2
+  enabled: true
 - base_url: http://ftp.dk.xemacs.org/voidlinux/
   region: EU
   location: Denmark
