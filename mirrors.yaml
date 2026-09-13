@@ -198,3 +198,8 @@
   location: Quito, Ecuador
   tier: 2
   enabled: true
+- base_url: https://void.mirror.lynnfra.net/
+  region: EU
+  location: Nuremberg, Germany
+  tier: 2
+  enabled: true
