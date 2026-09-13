@@ -113,6 +113,11 @@
   location: Denmark
   tier: 2
   enabled: true
+- base_url: https://void.mirror.lynnfra.net/
+  region: EU
+  location: Nuremberg, Germany
+  tier: 2
+  enabled: true
 - base_url: https://ftp.cc.uoc.gr/mirrors/linux/voidlinux/
   region: EU
   location: Greece
