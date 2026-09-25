@@ -163,6 +163,11 @@
   location: Bern, Switzerland
   tier: 2
   enabled: true
+- base_url: https://mirror.velden.media/voidlinux/
+  region: EU
+  location: Basel, Switzerland
+  tier: 2
+  enabled: true
 - base_url: https://mirror.vofr.net/voidlinux/
   region: NA
   location: Virginia, USA
