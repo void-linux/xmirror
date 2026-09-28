@@ -213,3 +213,8 @@
   location: Quito, Ecuador
   tier: 2
   enabled: true
+- base_url: https://void.mirror.net.za
+  region: ZA
+  location: Johannesburg, South Africa
+  tier: 2
+  enabled: true
