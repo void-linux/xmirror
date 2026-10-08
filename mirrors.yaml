@@ -213,3 +213,8 @@
   location: Quito, Ecuador
   tier: 2
   enabled: true
+- base_url: https://mirror.zyner.org/voidlinux/
+  region: EU
+  location: Lund, Sweden
+  tier: 2
+  enabled: true
