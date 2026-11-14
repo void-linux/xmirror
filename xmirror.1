@@ -14,6 +14,16 @@ utility sets and resets the mirror server that XBPS uses.
 It can be used both with and without the interactive TUI.
 .Nm
 requires root permissions to execute.
+.Pp
+In the interactive TUI, the
+.Em Fastest
+entry in the region menu tests the download speed of every mirror in the mirror
+list, one by one, and shows the progress live.
+When the test is done, the mirrors are listed sorted by speed, with the
+location, speed, and host name of each one, and the chosen mirror is set.
+Mirrors that fail to respond within 5 seconds are left out of the list.
+This option requires
+.Xr curl 1 .
 .Sh OPTIONS
 .Ss Common
 .Bl -tag -width -x
@@ -83,6 +93,7 @@ All lines beginning with
 .Em #
 are ignored.
 .Sh SEE ALSO
+.Xr curl 1 ,
 .Xr xbps-install 1 ,
 .Lk https://docs.voidlinux.org/xbps/repositories/mirrors/changing.html
 .Sh AUTHOR

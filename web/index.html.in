@@ -94,6 +94,11 @@
 		for instructions.
 	</p>
 
+	<p>
+		The <code>xmirror</code> utility also has a <em>Fastest</em> option, which tests the download speed of every mirror live
+		and lists them sorted by speed, so you can pick the fastest one for your connection.
+	</p>
+
 	<h2 id="creating">Creating a Mirror</h2>
 	<p>
 		If you'd like to set up a mirror, and are confident you can keep it reasonably up-to-date,
