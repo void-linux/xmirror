@@ -35,7 +35,7 @@ BOLD="\Zb"
 RESET="\Zn"
 INITMSG=$(fold -sw 76 <<EOF
 
-For the best experience, choose a mirror geographically close to you, or use the Fastly Global CDN (listed in ${RED}World${RESET}). To use the default mirror (${RED}repo-default.voidlinux.org${RESET}), which can point to any Tier 1 mirror, Select ${BOLD}${RED}Default${RESET}.
+For the best experience, choose a mirror geographically close to you, or use the Fastly Global CDN (listed in ${RED}World${RESET}). To find the fastest mirror for your connection, select ${BOLD}${RED}Fastest${RESET}: it tests every mirror live and sorts them by speed. To use the default mirror (${RED}repo-default.voidlinux.org${RESET}), which can point to any Tier 1 mirror, Select ${BOLD}${RED}Default${RESET}.
 
 Tier 1 mirrors are maintained by the Void Linux Infrastructure Team and will always have the latest packages available. Tier 2 mirrors are not managed by Void and do not have any guarantees of freshness or completeness of packages, nor are they required to sync every available architecture or sub-repository.
 EOF
@@ -126,6 +126,7 @@ get_mirrors() {
 		regions+=( "$region" "$(region_name "$region")" )
 	done
 
+	regions+=( "Fastest" "Test all mirrors and sort by speed" )
 	regions+=( "Default" "Reset to the default mirror" )
 	regions+=( "Exit" "Exit this wizard" )
 }
@@ -193,6 +194,68 @@ reset_mirrors() {
 	set +e
 }
 
+bench_mirror() {
+	local url="$1" arch path out code speed
+	arch="$(xbps-uhelper arch)"
+	path="$(sed -n 's|^repository=https://repo-default.voidlinux.org/||p' \
+		"${ROOTDIR}"/usr/share/xbps.d/00-repository-main.conf | head -n1)"
+	path="${path%/}/${arch}-repodata"
+	out="$(curl -s -m 5 -o /dev/null -w '%{http_code} %{speed_download}' "${url%/}/$path")"
+	read -r code speed <<< "$out"
+	[ "$code" = 200 ] || speed=0
+	echo "${speed%.*}"
+}
+
+benchmark_menu() {
+	local tmp url location tier rest region host n=0 total speed sel
+	local -A info
+	local -a urls results
+	tmp=$(mktemp -t xmirror-bench-XXXXXXXX)
+
+	for region in "${!allmirrors[@]}"; do
+		while IFS=$'\t' read -r url location tier rest; do
+			[ -z "$url" ] && continue
+			info["$url"]="$location (Tier $tier)"
+			urls+=( "$url" )
+		done <<< "${allmirrors[$region]}"
+	done
+	total=${#urls[@]}
+
+	{
+		for url in "${urls[@]}"; do
+			n=$((n + 1))
+			speed="$(bench_mirror "$url")"
+			echo "${speed:-0} $url" >> "$tmp"
+			printf '[%d/%d] %7d KiB/s  %s\n' "$n" "$total" "$(( ${speed:-0} / 1024 ))" "$url"
+		done
+		printf '\nDone. Press ENTER.\n'
+	} | DIALOG --title " Testing mirrors (live) " --programbox 20 78
+
+	while read -r speed url; do
+		[ "$speed" -gt 0 ] || continue
+		host="${url#*://}"; host="${host%%/*}"
+		results+=( "$url" "$(printf '%-28.28s %5d KiB/s  %s' "${info[$url]}" "$(( speed / 1024 ))" "$host")" )
+	done < <(sort -rn "$tmp")
+	rm -f "$tmp"
+
+	if [ "${#results[@]}" -eq 0 ]; then
+		DIALOG --msgbox "No mirror responded." 6 40
+		return
+	fi
+
+	while true; do
+		DIALOG --title " Mirrors sorted by speed " --no-tags \
+			--menu "$MENULABEL" 10 78 0 \
+			"${results[@]}"
+
+		sel="$(cat "$ANSWER")"
+		case $sel in
+			"") return ;;
+			*) write_mirrors_int "$sel" ;;
+		esac
+	done
+}
+
 region_menu() {
 	local sel
 	DIALOG --title " Choose a Region " \
@@ -203,6 +266,12 @@ region_menu() {
 	case $sel in
 		"Exit"|'') exit 0 ;;
 		"Default") reset_mirrors_int ;;
+		"Fastest")
+			if command -v curl >/dev/null 2>&1; then
+				benchmark_menu
+			else
+				DIALOG --msgbox "Fastest needs curl. Install it and try again." 6 50
+			fi ;;
 		*) mirror_menu "$sel" ;;
 	esac
 }
